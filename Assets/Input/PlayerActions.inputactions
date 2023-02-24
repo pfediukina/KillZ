@@ -11,7 +11,7 @@
                     "id": "0fdeb95f-b327-43f8-ade1-742cde1fcb9c",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": true
                 }
             ],
@@ -125,6 +125,34 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Screen",
+            "id": "c4dabba5-a4b0-4513-981c-25a873bb3533",
+            "actions": [
+                {
+                    "name": "Movement",
+                    "type": "Value",
+                    "id": "829f17eb-6d40-49d2-8276-870b545a4547",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "8df9b96f-3864-4138-8fc5-d0f87c272766",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "NormalizeVector2",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

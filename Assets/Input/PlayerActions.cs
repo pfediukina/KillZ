@@ -33,7 +33,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""id"": ""0fdeb95f-b327-43f8-ade1-742cde1fcb9c"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": true
                 }
             ],
@@ -149,6 +149,34 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Screen"",
+            ""id"": ""c4dabba5-a4b0-4513-981c-25a873bb3533"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""829f17eb-6d40-49d2-8276-870b545a4547"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8df9b96f-3864-4138-8fc5-d0f87c272766"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -156,6 +184,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         // Keyboard
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
         m_Keyboard_Movement = m_Keyboard.FindAction("Movement", throwIfNotFound: true);
+        // Screen
+        m_Screen = asset.FindActionMap("Screen", throwIfNotFound: true);
+        m_Screen_Movement = m_Screen.FindAction("Movement", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -244,7 +275,44 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         }
     }
     public KeyboardActions @Keyboard => new KeyboardActions(this);
+
+    // Screen
+    private readonly InputActionMap m_Screen;
+    private IScreenActions m_ScreenActionsCallbackInterface;
+    private readonly InputAction m_Screen_Movement;
+    public struct ScreenActions
+    {
+        private @PlayerActions m_Wrapper;
+        public ScreenActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_Screen_Movement;
+        public InputActionMap Get() { return m_Wrapper.m_Screen; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ScreenActions set) { return set.Get(); }
+        public void SetCallbacks(IScreenActions instance)
+        {
+            if (m_Wrapper.m_ScreenActionsCallbackInterface != null)
+            {
+                @Movement.started -= m_Wrapper.m_ScreenActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_ScreenActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_ScreenActionsCallbackInterface.OnMovement;
+            }
+            m_Wrapper.m_ScreenActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+            }
+        }
+    }
+    public ScreenActions @Screen => new ScreenActions(this);
     public interface IKeyboardActions
+    {
+        void OnMovement(InputAction.CallbackContext context);
+    }
+    public interface IScreenActions
     {
         void OnMovement(InputAction.CallbackContext context);
     }
