@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Information/PlayerInformation")]
-public class PlayerInfo : ScriptableObject
+[CreateAssetMenu(menuName = "Information/UnitInformation")]
+public class UnitInfo : ScriptableObject
 {
     public float StartSpeed;
 }
