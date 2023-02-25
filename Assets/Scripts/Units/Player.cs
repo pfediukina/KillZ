@@ -6,16 +6,15 @@ using UnityEngine.Windows;
 public class Player : Unit
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
-    [SerializeField] private PlayerInput _input;
 
-    private void OnEnable()
+    public override void FixedUpdateNetwork()
     {
-        _input.OnMovePerfomed += Move;
+        Move();
     }
 
     private void Move()
     {
-        GetInput(out NetworkInputData data);
+        if (!GetInput(out NetworkInputData data)) return;
         if (data.Direction.x != 0) _spriteRenderer.flipX = data.Direction.x > 0 ? false : true;
         transform.Translate(data.Direction * _info.StartSpeed * Runner.DeltaTime);
     }

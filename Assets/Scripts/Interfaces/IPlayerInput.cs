@@ -5,5 +5,5 @@ using UnityEngine;
 
 public interface IPlayerInput
 {
-    public bool GetDirectionAndInvoke(Action ifMoved, out Vector2 dir);
+    public bool GetDirectionAndInvoke(out Vector2 dir);
 }
