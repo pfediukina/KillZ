@@ -45,20 +45,16 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        //WIP
-
-        if(_keys.GetDirectionAndInvoke(out Vector2 dir) || _screen.GetDirectionAndInvoke(out dir))
-        {
-            var myInput = new NetworkInputData();
-            myInput.Direction = dir;
-            input.Set(myInput);
-        }
+        var myInput = new NetworkInputData();
+        myInput.Direction = _keys.GetDirection();
+        input.Set(myInput);
+        
     }
 
     private void EnableInput()
     {
         _keys = new KeyboardInput(_actions);
-        _screen = new ScreenInput(_actions);
+        //_screen = new ScreenInput(_actions);
     }
 
     #region UNUSED

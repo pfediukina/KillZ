@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
-public class ScreenInput : IPlayerInput
+public class ScreenInput //: IPlayerInput
 {
     private PlayerActions _actions;
 

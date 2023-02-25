@@ -15,12 +15,8 @@ public class KeyboardInput : IPlayerInput
         _actions = actions;
     }
 
-    public bool GetDirectionAndInvoke(out Vector2 dir)
+    public Vector2 GetDirection()
     {
-        Vector2 direction;
-        direction = _actions.Keyboard.Movement.ReadValue<Vector2>();
-        dir = direction;
-        if (direction != Vector2.zero) return true;
-        return false;
+        return _actions.Keyboard.Movement.ReadValue<Vector2>();
     }
 }
