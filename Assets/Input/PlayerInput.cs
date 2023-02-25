@@ -1,49 +1,135 @@
-using Assets.Input;
+using Fusion;
+using Fusion.Sockets;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour
+public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 {
-    public Action<Vector2> OnMovePerfomed;
+    //blic Action<NetworkInputData> OnMovePerfomed;
 
     private PlayerActions _actions;
-    private IPlayerInput _keyboard;
-    private IPlayerInput _screen;
+    bool _liseners = false;
 
     private void Awake()
     {
         if (_actions == null)
         {
             _actions = new PlayerActions();
-            SetupInput();
         }
     }
 
     private void OnEnable()
     {
-        if (_actions != null) _actions.Enable();
-        if (_keyboard != null) _keyboard.OnPlayerInput += ctx => OnMovePerfomed?.Invoke(ctx);
-        if (_screen != null) _screen.OnPlayerInput += ctx => OnMovePerfomed?.Invoke(ctx);
+        _actions.Enable();
+        if (Runner != null)
+        {
+            Runner.AddCallbacks(this);
+            Debug.Log("Added");
+        }
     }
 
     private void OnDisable()
     {
-        if (_actions != null) _actions.Disable();
-        if (_keyboard != null) _keyboard.OnPlayerInput -= ctx => OnMovePerfomed?.Invoke(ctx);
-        if (_screen != null) _screen.OnPlayerInput -= ctx => OnMovePerfomed?.Invoke(ctx);
+        _actions.Disable();
+        if (Runner != null)
+        {
+            Runner.RemoveCallbacks(this);
+        }
     }
 
     private void Update()
     {
-        _keyboard.GetDirectionAndInvoke();
-        _screen.GetDirectionAndInvoke();
+        if(Runner != null) 
+        {
+            if(!_liseners)
+            {
+                _liseners = true;
+                Runner.AddCallbacks(this);
+            }
+        }
     }
 
-    private void SetupInput()
+    public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        _keyboard = new KeyboardInput(_actions);
-        _screen = new ScreenInput(_actions);
+        var myInput = new NetworkInputData();
+        myInput.Direction = _actions.Keyboard.Movement.ReadValue<Vector2>();
+        myInput.buttons.Set(0, _actions.Keyboard.Movement.IsPressed());
+        input.Set(myInput);
+    }
+
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnConnectedToServer(NetworkRunner runner)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnDisconnectedFromServer(NetworkRunner runner)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnSceneLoadDone(NetworkRunner runner)
+    {
+        //throw new NotImplementedException();
+    }
+
+    public void OnSceneLoadStart(NetworkRunner runner)
+    {
+        //throw new NotImplementedException();
     }
 }

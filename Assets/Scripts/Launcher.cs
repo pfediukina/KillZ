@@ -18,7 +18,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 
     public async void StartGame()
     {
-        _runner = gameObject.GetComponent<NetworkRunner>();
+        _runner = GetComponent<NetworkRunner>();
         _runner.ProvideInput = true;
         await _runner.StartGame(new StartGameArgs()
         {
@@ -26,7 +26,8 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             SessionName = "TestRoom",
             Scene = SceneManager.GetActiveScene().buildIndex,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
-        });
+        }) ; 
+       
     }
 
     public async void JoinGame()
@@ -64,7 +65,11 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public void OnInput(NetworkRunner runner, NetworkInput input) { }
+    public void OnInput(NetworkRunner runner, NetworkInput input) 
+    {
+        var data = new NetworkInputData();
+        input.Set(data);
+    }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 

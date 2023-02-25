@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Input
-{
-    internal class KeyboardInput : IPlayerInput
+
+    public class KeyboardInput : IPlayerInput
     {
         public event IPlayerInput.PlayerInputHandler OnPlayerInput;
 
@@ -26,4 +25,4 @@ namespace Assets.Input
                 OnPlayerInput?.Invoke(direction);
         }
     }
-}
+

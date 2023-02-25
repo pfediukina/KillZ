@@ -1,28 +1,38 @@
 using UnityEngine;
 using UnityEngine.Windows;
 
-[RequireComponent(typeof(PlayerInput))]
+//[RequireComponent(typeof(PlayerInput))]
+
 public class Player : Unit
 {
-    private PlayerInput _input;
+    [SerializeField] private float _speed;
+    //public PlayerInput Input { get; private set; }
+    //private NetworkCharacterControllerPrototype _cc;
 
-    private void Awake()
+    //private void Awake()
+    //{
+    //    _cc = GetComponent<NetworkCharacterControllerPrototype>();
+    //}
+
+    public override void FixedUpdateNetwork()
     {
-        _input = GetComponent<PlayerInput>();
+        if (GetInput(out NetworkInputData data))
+        {
+            if (data.Direction != Vector2.zero)
+            {
+                Move(data.Direction);
+            }
+        }
     }
 
-    private void OnEnable()
+    private void Move(Vector3 dir)
     {
-        _input.OnMovePerfomed += Move;
-    }
-
-    public override void Move(Vector2 direction)
-    {
-        if(direction == Vector2.zero) return;
-        //rotate only when X changed
-        if (direction.x != 0) transform.eulerAngles = Vector3.up * (direction.x > 0 ? 0 : 180);
-
-        transform.position += Vector3.right * direction.x * MoveSpeed * Time.deltaTime;
-        transform.position += Vector3.up * direction.y * MoveSpeed * Time.deltaTime;
+        if (dir.x != 0) transform.eulerAngles = Vector3.up * (dir.x > 0 ? 0 : 180);
+        Vector3 move = Vector3.zero;
+        move.x = dir.x;
+        move.y = dir.y;
+        //_cc.Move(move);
+        transform.position += dir * _info.StartSpeed * Runner.DeltaTime;
+        
     }
 }

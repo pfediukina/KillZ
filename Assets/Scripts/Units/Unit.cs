@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Fusion;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(StateMachine))]
-public abstract class Unit : MonoBehaviour
+public abstract class Unit : NetworkBehaviour
 {
-    [SerializeField] private UnitInfo _info;
+    [SerializeField] protected UnitInfo _info;
     public virtual float MoveSpeed => _info.StartSpeed;
     public virtual StateMachine States { get; protected set; }
-
-    public abstract void Move(Vector2 direction);
 }

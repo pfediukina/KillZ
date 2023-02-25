@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3848227093265116873}
-  - component: {fileID: 6737502206152166642}
   - component: {fileID: 3482937421623987917}
   - component: {fileID: 6330168330867440793}
   - component: {fileID: 8258957040370376149}
   - component: {fileID: 5577923892713437581}
   - component: {fileID: 2058190680497372042}
-  - component: {fileID: 2005453925560671634}
   - component: {fileID: 6285291217013281618}
+  - component: {fileID: 7198567952426255754}
+  - component: {fileID: 5635304161769832816}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Untagged
@@ -37,21 +37,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3848227094037181539}
+  - {fileID: 304314290396034329}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6737502206152166642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3848227093265116870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5f2456d0f7c9744394549abb5c5eaf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3482937421623987917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,7 +53,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd68e301cabd32541bd3a808967d2c45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _info: {fileID: 11400000, guid: c2034458f79bf6b429bff73a35a046d9, type: 2}
+  _interpolationDataSource: 0
+  _info: {fileID: 11400000, guid: b731d3060966de545b5d89062b1f2fea, type: 2}
+  _speed: 1
 --- !u!114 &6330168330867440793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,8 +94,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
+  m_Height: 0
+  m_Radius: 1
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -125,7 +116,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   InterpolationSpace: 0
   InterpolationTarget: {fileID: 3848227093265116873}
-  InterpolateErrorCorrection: 1
+  InterpolateErrorCorrection: 0
   InterpolatedErrorCorrectionSettings:
     MinRate: 3.3
     MaxRate: 10
@@ -138,15 +129,30 @@ MonoBehaviour:
     RotTeleportRadians: 1.5
   UseLegacySharedModeInterpolation: 0
   TargetInterpolationDelay: 0.03
-  gravity: -20
-  jumpImpulse: 8
+  gravity: 0
+  jumpImpulse: 0
   acceleration: 10
   braking: 10
-  maxSpeed: 2
-  rotationSpeed: 15
+  maxSpeed: 10
+  rotationSpeed: 0
   _IsGrounded: 0
   _Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &2005453925560671634
+--- !u!114 &6285291217013281618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3848227093265116870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e741851cba3ad425c91ecf922cc6b379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"declarations":{"Kind":"Object","collection":{"$content":[],"$version":"A"},"$version":"A"}}'
+    _objectReferences: []
+--- !u!114 &7198567952426255754
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,9 +174,12 @@ MonoBehaviour:
     RawGuidValue: 633ad2e018890a9459789d33eed8dd28
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 3482937421623987917}
   - {fileID: 2058190680497372042}
-  SimulationBehaviours: []
---- !u!114 &6285291217013281618
+  SimulationBehaviours:
+  - {fileID: 5635304161769832816}
+  - {fileID: 6439918484905171182}
+--- !u!114 &5635304161769832816
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,12 +188,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3848227093265116870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e741851cba3ad425c91ecf922cc6b379, type: 3}
+  m_Script: {fileID: 11500000, guid: e5f2456d0f7c9744394549abb5c5eaf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data:
-    _json: '{"declarations":{"Kind":"Object","collection":{"$content":[],"$version":"A"},"$version":"A"}}'
-    _objectReferences: []
 --- !u!1 &3848227094037181536
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,3 +296,60 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!1 &8867564200858520159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 304314290396034329}
+  - component: {fileID: 6439918484905171182}
+  - component: {fileID: 4808337102617558744}
+  m_Layer: 0
+  m_Name: Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &304314290396034329
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8867564200858520159}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3848227093265116873}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6439918484905171182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8867564200858520159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5f2456d0f7c9744394549abb5c5eaf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4808337102617558744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8867564200858520159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1199893898, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
