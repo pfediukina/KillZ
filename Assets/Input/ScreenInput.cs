@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class ScreenInput : IPlayerInput
 {
-    public event IPlayerInput.PlayerInputHandler OnPlayerInput;
-
     private PlayerActions _actions;
 
     public ScreenInput(PlayerActions actions)
@@ -16,12 +14,16 @@ public class ScreenInput : IPlayerInput
         _actions = actions;
     }
 
-    public void GetDirectionAndInvoke()
+    public bool GetDirectionAndInvoke(Action<Vector2> ifMoved)
     {
         Vector2 direction;
         direction = _actions.Screen.Movement.ReadValue<Vector2>();
         if (direction != Vector2.zero)
-            OnPlayerInput?.Invoke(direction);
+        {
+            ifMoved?.Invoke(direction);
+            return true;
+        }
+        return false;
     }
 }
 

@@ -6,23 +6,24 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-    public class KeyboardInput : IPlayerInput
+public class KeyboardInput : IPlayerInput
+{
+    private PlayerActions _actions;
+
+    public KeyboardInput(PlayerActions actions)  
     {
-        public event IPlayerInput.PlayerInputHandler OnPlayerInput;
-
-        private PlayerActions _actions;
-
-        public KeyboardInput(PlayerActions actions)  
-        {
-            _actions = actions;
-        }
-
-        public void GetDirectionAndInvoke()
-        {
-            Vector2 direction;
-            direction = _actions.Keyboard.Movement.ReadValue<Vector2>();
-            if(direction != Vector2.zero)
-                OnPlayerInput?.Invoke(direction);
-        }
+        _actions = actions;
     }
 
+    public bool GetDirectionAndInvoke(Action<Vector2> ifMoved)
+    {
+        Vector2 direction;
+        direction = _actions.Keyboard.Movement.ReadValue<Vector2>();
+        if (direction != Vector2.zero)
+        {
+            ifMoved?.Invoke(direction);
+            return true;
+        }
+        return false;
+    }
+}

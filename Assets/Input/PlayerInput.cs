@@ -3,30 +3,27 @@ using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 {
-    //blic Action<NetworkInputData> OnMovePerfomed;
+    public Action<Vector2> OnMovePerfomed;
 
     private PlayerActions _actions;
-    bool _liseners = false;
+    private IPlayerInput _keys;
 
     private void Awake()
     {
         if (_actions == null)
         {
             _actions = new PlayerActions();
+            EnableInput();
         }
     }
 
     private void OnEnable()
     {
         _actions.Enable();
-        if (Runner != null)
-        {
-            Runner.AddCallbacks(this);
-            Debug.Log("Added");
-        }
     }
 
     private void OnDisable()
@@ -38,25 +35,30 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    private void Update()
+    private void Start()
     {
-        if(Runner != null) 
+        if (Runner != null)
         {
-            if(!_liseners)
-            {
-                _liseners = true;
-                Runner.AddCallbacks(this);
-            }
+            Runner.AddCallbacks(this);
         }
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        var myInput = new NetworkInputData();
-        myInput.Direction = _actions.Keyboard.Movement.ReadValue<Vector2>();
-        myInput.buttons.Set(0, _actions.Keyboard.Movement.IsPressed());
-        input.Set(myInput);
+        if(_keys.GetDirectionAndInvoke(OnMovePerfomed))
+        {
+            var myInput = new NetworkInputData();
+            input.Set(myInput);
+        }
     }
+
+    private void EnableInput()
+    {
+        _keys = new KeyboardInput(_actions);
+        
+    }
+
+    #region UNUSED
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
@@ -132,4 +134,5 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
     {
         //throw new NotImplementedException();
     }
+    #endregion
 }
