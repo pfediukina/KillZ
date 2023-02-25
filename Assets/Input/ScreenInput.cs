@@ -14,13 +14,14 @@ public class ScreenInput : IPlayerInput
         _actions = actions;
     }
 
-    public bool GetDirectionAndInvoke(Action<Vector2> ifMoved)
+    public bool GetDirectionAndInvoke(Action ifMoved, out Vector2 dir)
     {
         Vector2 direction;
         direction = _actions.Screen.Movement.ReadValue<Vector2>();
+        dir = direction;
         if (direction != Vector2.zero)
         {
-            ifMoved?.Invoke(direction);
+            ifMoved?.Invoke();
             return true;
         }
         return false;

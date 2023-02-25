@@ -13,14 +13,14 @@ public class Player : Unit
         _input.OnMovePerfomed += Move;
     }
 
-    private void Move(Vector2 dir)
+    private void Move()
     {
-        if (dir.x != 0) _spriteRenderer.flipX = dir.x > 0 ? false : true;
+        GetInput(out NetworkInputData data);
 
-        Vector3 move = Vector3.zero;
-        move.x = dir.x;
-        move.y = dir.y;
-        transform.Translate(dir * _info.StartSpeed * Runner.DeltaTime); // position += dir * _info.StartSpeed * Runner.DeltaTime;
-        
+        if (data.Direction.x != 0) _spriteRenderer.flipX = data.Direction.x > 0 ? false : true;
+        //Vector3 move = dir;
+        //move.x = dir.x;
+        //move.y = dir.y;
+        transform.Translate(data.Direction * _info.StartSpeed * Runner.DeltaTime); // position += dir * _info.StartSpeed * Runner.DeltaTime;
     }
 }

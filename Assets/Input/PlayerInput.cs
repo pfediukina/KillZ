@@ -7,7 +7,7 @@ using UnityEngine.Windows;
 
 public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 {
-    public Action<Vector2> OnMovePerfomed;
+    public Action OnMovePerfomed;
 
     private PlayerActions _actions;
     private IPlayerInput _keys;
@@ -45,9 +45,11 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if(_keys.GetDirectionAndInvoke(OnMovePerfomed))
+        Vector2 dir;
+        if(_keys.GetDirectionAndInvoke(OnMovePerfomed, out dir))
         {
             var myInput = new NetworkInputData();
+            myInput.Direction = dir;
             input.Set(myInput);
         }
     }
@@ -55,7 +57,6 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
     private void EnableInput()
     {
         _keys = new KeyboardInput(_actions);
-        
     }
 
     #region UNUSED
