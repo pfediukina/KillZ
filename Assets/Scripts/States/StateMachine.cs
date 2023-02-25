@@ -12,12 +12,6 @@ public class StateMachine : NetworkBehaviour
     private Dictionary<Type, IState> _statesMap;
     private Unit _unit;
 
-    public StateMachine(Unit unit)
-    {
-        _unit = unit;
-        Initialize();
-    }
-
     public override void FixedUpdateNetwork()
     {
         if (CurrentState != null &&
@@ -28,8 +22,9 @@ public class StateMachine : NetworkBehaviour
         }
     }
 
-    private void Initialize()
+    public void Initialize(Unit unit)
     {
+        _unit = unit;
         InitStates();
         SetStateByDefault();
     }
@@ -69,6 +64,7 @@ public class StateMachine : NetworkBehaviour
         _statesMap = new Dictionary<Type, IState>();
 
         _statesMap[typeof(IdleState)] = new IdleState(_unit);
+        _statesMap[typeof(MoveState)] = new MoveState(_unit);
     }
 
     private void SetStateByDefault()

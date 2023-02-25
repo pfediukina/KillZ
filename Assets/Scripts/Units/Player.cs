@@ -13,7 +13,8 @@ public class Player : Unit
     {
         if (Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data))
         {
-            States.SetState<MoveState>();
+            if(States.CurrentState is not MoveState)
+                States.SetState<MoveState>();
             //transform.Translate(data.Direction * _info.StartSpeed * Runner.DeltaTime);
             //if (data.Direction.x != 0) FlipSrpite = data.Direction.x > 0 ? false : true;
         }
