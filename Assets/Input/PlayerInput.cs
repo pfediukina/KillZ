@@ -48,7 +48,6 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
         var myInput = new NetworkInputData();
         myInput.Direction = _keys.GetDirection();
         input.Set(myInput);
-        
     }
 
     private void EnableInput()
@@ -56,7 +55,6 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
         _keys = new KeyboardInput(_actions);
         //_screen = new ScreenInput(_actions);
     }
-
     #region UNUSED
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)

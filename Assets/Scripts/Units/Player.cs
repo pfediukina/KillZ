@@ -1,5 +1,5 @@
+using Fusion;
 using UnityEngine;
-using UnityEngine.Windows;
 
 //[RequireComponent(typeof(PlayerInput))]
 
@@ -7,21 +7,21 @@ public class Player : Unit
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
-    private int inner = 0;
+    [Networked(OnChanged = nameof(OnFlip))] private NetworkBool FlipSrpite { get; set; }
 
     public override void FixedUpdateNetwork()
     {
-        Move();
+        if (Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data))
+        {
+            States.SetState<MoveState>();
+            //transform.Translate(data.Direction * _info.StartSpeed * Runner.DeltaTime);
+            //if (data.Direction.x != 0) FlipSrpite = data.Direction.x > 0 ? false : true;
+        }
     }
 
-    private void Move()
+    //need static or SO MUCH errors
+    private static void OnFlip(Changed<Player> changed)
     {
-        GetInput(out NetworkInputData data);
-        if(data.Direction == Vector2.zero) return;
-
-        inner++;
-        Debug.Log(inner);
-        if (data.Direction.x != 0) _spriteRenderer.flipX = data.Direction.x > 0 ? false : true;
-        transform.Translate(data.Direction * _info.StartSpeed * Runner.DeltaTime);
+        changed.Behaviour._spriteRenderer.flipX = changed.Behaviour.FlipSrpite;
     }
 }

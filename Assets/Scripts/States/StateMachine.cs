@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Fusion;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class StateMachine : MonoBehaviour
+public class StateMachine : NetworkBehaviour
 {
     public IState CurrentState { get; private set; }
     public IState PreviousState { get; private set;}
@@ -17,10 +18,12 @@ public class StateMachine : MonoBehaviour
         Initialize();
     }
 
-    public void Update()
+    public override void FixedUpdateNetwork()
     {
-        if (CurrentState != null)
+        if (CurrentState != null &&
+            Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data))
         {
+            CurrentState.Data = data;
             CurrentState.Update();
         }
     }
@@ -29,6 +32,11 @@ public class StateMachine : MonoBehaviour
     {
         InitStates();
         SetStateByDefault();
+    }
+
+    public void AddState<T>(T state) where T : IState
+    {
+        _statesMap[typeof(T)] = state;
     }
 
     public void SetState<T>() where T : IState
@@ -41,6 +49,13 @@ public class StateMachine : MonoBehaviour
         CurrentState = newState;
 
         newState.Enter();
+    }
+
+    public void SetState<T>(NetworkInputData data) where T : IState
+    {
+        var newState = GetState<T>();
+        newState.Data = data;
+        SetState<T>();
     }
 
     public T GetState<T>() where T : IState
