@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5635304161769832816}
   - component: {fileID: 6330168330867440793}
   - component: {fileID: 7198567952426255754}
+  - component: {fileID: 2735376734023496731}
   - component: {fileID: 8925132293088092826}
   - component: {fileID: 8258957040370376149}
   m_Layer: 0
@@ -102,9 +103,25 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 3482937421623987917}
   - {fileID: 6330168330867440793}
+  - {fileID: 2735376734023496731}
   - {fileID: 8925132293088092826}
   SimulationBehaviours:
   - {fileID: 5635304161769832816}
+--- !u!114 &2735376734023496731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3848227093265116870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471f26ec2948cbc42b8aca1c6c305abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _animator: {fileID: 3848227094037181538}
+  _sprite: {fileID: 3848227094037181541}
 --- !u!114 &8925132293088092826
 MonoBehaviour:
   m_ObjectHideFlags: 0

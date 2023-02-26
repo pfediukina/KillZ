@@ -6,8 +6,9 @@ using UnityEngine;
 public abstract class Unit : NetworkBehaviour
 {
     [SerializeField] protected UnitInfo _info;
-    //public virtual float MoveSpeed => _info.StartSpeed;
+
     public virtual StateMachine States { get; private set; }
+    public virtual UnitInfo Info => _info;
 
     private void Awake()
     {

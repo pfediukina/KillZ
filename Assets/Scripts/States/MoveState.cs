@@ -8,27 +8,30 @@ public class MoveState : IState
 {
     public NetworkInputData Data { get; set; }
 
-    //private Animator _animator;
+    private int _animationID = Animator.StringToHash("Move");
+    private NetworkAnimator _animator;
     private Unit _unit;
-    private NetworkTransform _transform;
 
     public MoveState(Unit unit) 
     {
-        //_animator = unit.GetComponentInChildren<Animator>();
+        _animator = unit.GetComponent<NetworkAnimator>();
         _unit = unit;
-        _transform = _unit.GetComponent<NetworkTransform>();
     }
-
 
     public void Enter()
     {
-        //if (data.Direction.x != 0) FlipSrpite = data.Direction.x > 0 ? false : true;
+        if (_unit.Runner != null)
+        {
+            _animator.RPC_ChangeAnimationID(_animationID);
+        }
     }
 
     public void Exit() { }
 
     public void Update()
     {
+        if (Data.Direction.x != 0) _animator.RPC_Flip(Data.Direction.x > 0 ? false : true);
+
         _unit.transform.Translate(Data.Direction * 5 * _unit.Runner.DeltaTime);
     }
 }

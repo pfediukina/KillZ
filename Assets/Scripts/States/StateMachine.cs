@@ -14,11 +14,13 @@ public class StateMachine : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+
         if (CurrentState != null &&
             Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data))
         {
             CurrentState.Data = data;
             CurrentState.Update();
+            //Debug.Log(CurrentState.GetType());
         }
     }
 
