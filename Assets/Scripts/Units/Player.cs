@@ -1,3 +1,4 @@
+using Cinemachine;
 using Fusion;
 using UnityEngine;
 
@@ -5,9 +6,25 @@ using UnityEngine;
 
 public class Player : Unit
 {
-    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private CinemachineVirtualCamera _camera;
 
-    [Networked(OnChanged = nameof(OnFlip))] private NetworkBool FlipSrpite { get; set; }
+    protected override void Awake()
+    {
+        base.Awake();
+        //if (Object.HasInputAuthority)
+        //{
+        //    _camera.Priority = 10;
+        //    Debug.Log("Awake");
+        //}
+    }
+
+    private void Start()
+    {
+        if (HasInputAuthority)
+        {
+            _camera.Priority = 10;
+        }
+    }
 
     public override void FixedUpdateNetwork()
     {
@@ -21,14 +38,6 @@ public class Player : Unit
             {
                 States.SetState<IdleState>();
             }
-            //transform.Translate(data.Direction * _info.StartSpeed * Runner.DeltaTime);
-            //if (data.Direction.x != 0) FlipSrpite = data.Direction.x > 0 ? false : true;
         }
-    }
-
-    //need static or SO MUCH errors
-    private static void OnFlip(Changed<Player> changed)
-    {
-        changed.Behaviour._spriteRenderer.flipX = changed.Behaviour.FlipSrpite;
     }
 }

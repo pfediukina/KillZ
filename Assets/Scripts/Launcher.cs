@@ -43,6 +43,13 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
+    public void LeaveServer()
+    {
+        _runner = gameObject.GetComponent<NetworkRunner>();
+        _runner.Shutdown();
+        SceneManager.LoadScene(0);
+    }
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
