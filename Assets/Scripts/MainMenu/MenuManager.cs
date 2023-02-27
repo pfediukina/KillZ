@@ -19,8 +19,8 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame(bool connect, string sessionName)
     {
-        PlayerPrefs.SetString("SessionName", sessionName);
-        PlayerPrefs.SetInt("IsConnect", connect ? 1 : 0);
+        SessionInfo.SessionName = sessionName;
+        SessionInfo.isConnect = connect;
         SceneManager.LoadScene(_gameSceneID);
     }
 }

@@ -1,10 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _menuCanvas;
+    [SerializeField] private TextMeshProUGUI _name;
+
+    private void Start()
+    {
+        _name.text = SessionInfo.SessionName;
+    }
 
     public void SwitchPlayerMenu()
     {
