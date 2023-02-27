@@ -31,7 +31,6 @@ public class Player : Unit
         if (HasInputAuthority)
         {
             OnPlayerPressedMenu?.Invoke();
-            Debug.Log("Back");
         }
     }
 
