@@ -1,22 +1,37 @@
 ﻿using Fusion;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class PlayerWeapon : NetworkBehaviour
 {
     [SerializeField] private BaseWeapon[] weapon;
+    public BaseWeapon CurrentWeapon { get;  set; }
 
-    public static BaseWeapon CurrentWeapon { get; private set; }
+    [Networked] private int _weaponType { get; set; }
 
     private void Start()
     {
-        RPC_CreateWeapon();
+        if (HasInputAuthority)
+        {
+            int rand = Random.Range(0, weapon.Length);
+            _weaponType = rand;
+            RPC_CreateWeapon(_weaponType);
+        }
+        else
+            CreateWeapon(_weaponType);
     }
 
     [Rpc]
-    private void RPC_CreateWeapon()
+    public void RPC_CreateWeapon(int ID)
     {
-        int rand = Random.Range(0, weapon.Length);
-        CurrentWeapon = Instantiate(weapon[rand], transform);
+        CreateWeapon(ID);
+    }
+
+    private void CreateWeapon(int ID)
+    {
+        if (transform.childCount > 0)
+            Destroy(transform.GetChild(0).gameObject);
+        CurrentWeapon = Instantiate(weapon[ID], transform);
         CurrentWeapon.transform.position = transform.position;
         CurrentWeapon.transform.position += Vector3.back * 1;
     }

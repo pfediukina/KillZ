@@ -167,7 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _data:
-    _json: '{"declarations":{"Kind":"Object","collection":{"$content":[],"$version":"A"},"$version":"A"}}'
+    _json: '{"declarations":{"Kind":"Object","collection":{"$content":[{"name":"Weapon","value":null,"typeHandle":{"Identification":"BaseWeapon,
+      Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","$version":"A"},"$version":"A"}],"$version":"A"},"$version":"A"}}'
     _objectReferences: []
 --- !u!1 &3848227094037181536
 GameObject:
@@ -323,6 +324,7 @@ MonoBehaviour:
   weapon:
   - {fileID: 5408696272927661819, guid: 81dfdacc65444f84a91cddacdaff9780, type: 3}
   - {fileID: 5408696272927661819, guid: 68c0bb51f80c9674d85b1c9d8f50498b, type: 3}
+  - {fileID: 5408696272927661819, guid: f93e91c062040f54f889894b166c50c2, type: 3}
 --- !u!1 &4508824512929961022
 GameObject:
   m_ObjectHideFlags: 0
