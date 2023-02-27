@@ -91,6 +91,11 @@ public class InputBehaviourPrototype : Fusion.Behaviour, INetworkRunnerCallbacks
   public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) {
 
   }
+
+    public void OnSessionListUpdated(NetworkRunner runner, List<Fusion.SessionInfo> sessionList)
+    {
+        //throw new NotImplementedException();
+    }
 }
 
 /// <summary>

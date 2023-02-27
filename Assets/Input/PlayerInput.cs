@@ -131,5 +131,7 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
     {
         //throw new NotImplementedException();
     }
+
+    public void OnSessionListUpdated(NetworkRunner runner, List<Fusion.SessionInfo> sessionList) { }
     #endregion
 }

@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//TEMP
 public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private string token;
@@ -16,31 +17,48 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner _runner;
 
-    public async void StartGame()
+    private void Awake()
     {
         _runner = GetComponent<NetworkRunner>();
+    }
+
+    public void Start()
+    {
+        LoadingScreen.EnableLoading(true);
+        if (PlayerPrefs.GetInt("IsConnect") == 1)
+        {
+            JoinGame(PlayerPrefs.GetString("SessionName"));
+        }
+        else
+        {
+            CreateGame(PlayerPrefs.GetString("SessionName"));
+        }
+    }
+
+    public async void CreateGame(string session)
+    {
         _runner.ProvideInput = true;
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Host,
-            SessionName = "TestRoom",
-            Scene = SceneManager.GetActiveScene().buildIndex,
+            SessionName = session,
+            Scene = SceneManager.GetSceneAt(0).buildIndex,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
-        }) ; 
-       
+        }) ;
+        LoadingScreen.EnableLoading(false);
     }
 
-    public async void JoinGame()
+    public async void JoinGame(string session)
     {
-        _runner = gameObject.GetComponent<NetworkRunner>();
         _runner.ProvideInput = true;
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Client,
-            SessionName = "TestRoom",
-            Scene = SceneManager.GetActiveScene().buildIndex,
+            SessionName = session,
+            Scene = SceneManager.GetSceneAt(0).buildIndex,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
+        LoadingScreen.EnableLoading(false);
     }
 
     public void LeaveServer()
@@ -78,6 +96,8 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
         input.Set(data);
     }
 
+    #region UNUSED
+
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
@@ -103,4 +123,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
     public void OnSceneLoadDone(NetworkRunner runner) { }
 
     public void OnSceneLoadStart(NetworkRunner runner) { }
+
+    public void OnSessionListUpdated(NetworkRunner runner, List<Fusion.SessionInfo> sessionList) { }
+    #endregion
 }
