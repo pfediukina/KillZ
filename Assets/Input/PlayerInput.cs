@@ -7,11 +7,12 @@ using UnityEngine.Windows;
 
 public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 {
+    public Action OnBackPressed;
+
     private IPlayerInput _keys;
-    private IPlayerInput _screen;
-
-
+    //private IPlayerInput _screen; 
     private PlayerActions _actions;
+    
     private void Awake()
     {
         if (_actions == null)
@@ -24,6 +25,7 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
     private void OnEnable()
     {
         _actions.Enable();
+        SetBinds();
     }
 
     private void OnDisable()
@@ -43,6 +45,11 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
         }
     }
 
+    private void SetBinds()
+    {
+        _actions.Keyboard.Back.performed += ctx => OnBackPressed?.Invoke();
+    }
+
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var myInput = new NetworkInputData();
@@ -55,6 +62,7 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
         _keys = new KeyboardInput(_actions);
         //_screen = new ScreenInput(_actions);
     }
+
     #region UNUSED
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)

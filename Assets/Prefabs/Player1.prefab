@@ -55,6 +55,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _info: {fileID: 11400000, guid: b731d3060966de545b5d89062b1f2fea, type: 2}
   _camera: {fileID: 135132439499716738}
+  _input: {fileID: 5635304161769832816}
 --- !u!114 &5635304161769832816
 MonoBehaviour:
   m_ObjectHideFlags: 0

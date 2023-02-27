@@ -1,5 +1,6 @@
 using Cinemachine;
 using Fusion;
+using System;
 using UnityEngine;
 
 //[RequireComponent(typeof(PlayerInput))]
@@ -7,15 +8,14 @@ using UnityEngine;
 public class Player : Unit
 {
     [SerializeField] private CinemachineVirtualCamera _camera;
+    [SerializeField] private PlayerInput _input;
+
+    public Action OnPlayerPressedMenu;
 
     protected override void Awake()
     {
         base.Awake();
-        //if (Object.HasInputAuthority)
-        //{
-        //    _camera.Priority = 10;
-        //    Debug.Log("Awake");
-        //}
+        _input.OnBackPressed += PressedMenu;
     }
 
     private void Start()
@@ -23,6 +23,15 @@ public class Player : Unit
         if (HasInputAuthority)
         {
             _camera.Priority = 10;
+        }
+    }
+
+    private void PressedMenu()
+    {
+        if (HasInputAuthority)
+        {
+            OnPlayerPressedMenu?.Invoke();
+            Debug.Log("Back");
         }
     }
 

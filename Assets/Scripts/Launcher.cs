@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using WebSocketSharp;
 
 //TEMP
 public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private string token;
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private PlayerUI _ui;
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
@@ -25,13 +27,14 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
     public void Start()
     {
         LoadingScreen.EnableLoading(true);
-        if (PlayerPrefs.GetInt("IsConnect") == 1)
+
+        if (SessionInfo.isConnect)
         {
-            JoinGame(PlayerPrefs.GetString("SessionName"));
+            JoinGame(SessionInfo.SessionName);
         }
         else
         {
-            CreateGame(PlayerPrefs.GetString("SessionName"));
+            CreateGame(SessionInfo.SessionName);
         }
     }
 
@@ -77,6 +80,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
             // Keep track of the player avatars so we can remove it when they disconnect
             _spawnedCharacters.Add(player, networkPlayerObject);
+            networkPlayerObject.GetComponent<Player>().OnPlayerPressedMenu += _ui.SwitchPlayerMenu;
         }
     }
 
