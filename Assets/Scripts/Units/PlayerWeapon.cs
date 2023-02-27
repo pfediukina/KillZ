@@ -5,7 +5,7 @@ public class PlayerWeapon : NetworkBehaviour
 {
     [SerializeField] private BaseWeapon[] weapon;
 
-    public BaseWeapon CurrentWeapon { get; private set; }
+    public static BaseWeapon CurrentWeapon { get; private set; }
 
     private void Start()
     {
