@@ -10,7 +10,6 @@ public class Player : Unit
 {
     [SerializeField] private CinemachineVirtualCamera _camera;
     [SerializeField] private PlayerInput _input;
-    [SerializeField] private PlayerWeapon _weapon;
 
     public Action OnPlayerPressedMenu;
 

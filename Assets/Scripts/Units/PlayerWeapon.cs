@@ -33,6 +33,5 @@ public class PlayerWeapon : NetworkBehaviour
             Destroy(transform.GetChild(0).gameObject);
         CurrentWeapon = Instantiate(weapon[ID], transform);
         CurrentWeapon.transform.position = transform.position;
-        CurrentWeapon.transform.position += Vector3.back * 1;
     }
 }

@@ -8,5 +8,6 @@ using UnityEngine;
 
 public class BaseWeapon : NetworkBehaviour
 {
-
+    [SerializeField] private SpriteRenderer _sprite;
+    public SpriteRenderer GetSprite() => _sprite;
 }
