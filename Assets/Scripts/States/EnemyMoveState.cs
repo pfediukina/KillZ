@@ -17,7 +17,7 @@ public class EnemyMoveState : IState
     {
         //_animator = unit.GetComponent<NetworkAnimator>();
         _unit = unit;
-        _rb = unit.GetComponentInChildren<Rigidbody2D>();
+        _rb = unit.GetComponent<Rigidbody2D>();
     }
 
     public void Enter() { }

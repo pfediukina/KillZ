@@ -4393,7 +4393,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485169450}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.3, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4415,7 +4415,9 @@ MonoBehaviour:
   _interpolationDataSource: 0
   Prefab: {fileID: 1800921801630860339, guid: 4a07c9da16bfc9c4c8e2fb688bc889ce, type: 3}
   spawnTime: 5
-  startAmount: 3
+  startAmount: 24
+  _radius: 10
+  _angleOffset: 15
 --- !u!114 &1485169453
 MonoBehaviour:
   m_ObjectHideFlags: 0

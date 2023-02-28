@@ -16,15 +16,8 @@ public class GameMaster : NetworkBehaviour
         CurrentTime = 0;
     }
 
-    private void Update()
-    {
-        if(CurrentTime == 60)
-            _zombieFactory.EndSpawn();
-    }
-
     public void StartGame()
     {
-        _zombieFactory.StartSpawn();
         EnableTimer = true;
         StartCoroutine(GameTimer());
     }
@@ -34,7 +27,17 @@ public class GameMaster : NetworkBehaviour
         while(EnableTimer)
         { 
             yield return new WaitForSecondsRealtime(1);
+            TimeTestEvent();
             CurrentTime++;
         }
+    }
+
+    //wip
+    private void TimeTestEvent()
+    {
+        if (CurrentTime == 10)
+            _zombieFactory.StartSpawn();
+        else if (CurrentTime == 30)
+            _zombieFactory.EndSpawn();
     }
 }

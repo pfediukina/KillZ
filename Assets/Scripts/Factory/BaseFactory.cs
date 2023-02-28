@@ -10,6 +10,7 @@ public class BaseFactory<T> : NetworkBehaviour where T : NetworkBehaviour
     //[SerializeField] protected NetworkRunner runner;
 
     protected ObjectPool<T> FactoryObjects;
+    protected HashSet<T> Objects = new HashSet<T>();
 
     protected ObjectPool<T> InitPool(int count, Transform parent)
     {
