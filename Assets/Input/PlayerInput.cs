@@ -8,6 +8,7 @@ using UnityEngine.Windows;
 public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 {
     public Action OnBackPressed;
+    public Action<Vector2> OnViewChanged;
 
     private IPlayerInput _keys;
     //private IPlayerInput _screen; 
@@ -35,6 +36,11 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
         {
             Runner.RemoveCallbacks(this);
         }
+    }
+
+    private void Update()
+    {
+        OnViewChanged?.Invoke(_actions.Keyboard.MousePos.ReadValue<Vector2>());
     }
 
     private void Start()

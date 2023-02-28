@@ -9,12 +9,27 @@ public class NetworkAnimator : NetworkBehaviour
     [SerializeField] private SpriteRenderer _sprite;
     [SerializeField] private PlayerWeapon _weapon;
 
+    [Networked] public float WeaponZRotation { get; set; }
+
     private SpriteRenderer _weaponSprite;
 
     private void Update()
     {
         if (_weaponSprite == null && _weapon.CurrentWeapon != null)
             _weaponSprite = _weapon.CurrentWeapon.GetSprite();
+    }
+
+    public void CalculateAndRotateWeapon(Vector2 mousePos, NetworkObject player)
+    {
+        if (!player.HasInputAuthority) return;
+        Vector2 weaponPos = Camera.main.WorldToScreenPoint(_weapon.transform.position);
+        WeaponZRotation = Mathf.Atan2(mousePos.y - weaponPos.y, mousePos.x - weaponPos.x) * Mathf.Rad2Deg;
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (_weaponSprite != null)
+            _weaponSprite.transform.eulerAngles = Vector3.forward * WeaponZRotation;
     }
 
     [Rpc]
@@ -30,4 +45,5 @@ public class NetworkAnimator : NetworkBehaviour
         if(_weaponSprite != null)
             _weaponSprite.flipX = flip;
     }
+
 }

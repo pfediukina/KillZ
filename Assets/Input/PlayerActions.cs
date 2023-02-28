@@ -44,6 +44,15 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePos"",
+                    ""type"": ""Value"",
+                    ""id"": ""c32688b7-0b35-434f-bc1e-14caf4d6e5fe"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -167,6 +176,17 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef1d01c6-1c07-4b9b-bfe5-4f12b5015d22"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePos"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -205,6 +225,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
         m_Keyboard_Movement = m_Keyboard.FindAction("Movement", throwIfNotFound: true);
         m_Keyboard_Back = m_Keyboard.FindAction("Back", throwIfNotFound: true);
+        m_Keyboard_MousePos = m_Keyboard.FindAction("MousePos", throwIfNotFound: true);
         // Screen
         m_Screen = asset.FindActionMap("Screen", throwIfNotFound: true);
         m_Screen_Movement = m_Screen.FindAction("Movement", throwIfNotFound: true);
@@ -269,12 +290,14 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private IKeyboardActions m_KeyboardActionsCallbackInterface;
     private readonly InputAction m_Keyboard_Movement;
     private readonly InputAction m_Keyboard_Back;
+    private readonly InputAction m_Keyboard_MousePos;
     public struct KeyboardActions
     {
         private @PlayerActions m_Wrapper;
         public KeyboardActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Keyboard_Movement;
         public InputAction @Back => m_Wrapper.m_Keyboard_Back;
+        public InputAction @MousePos => m_Wrapper.m_Keyboard_MousePos;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -290,6 +313,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Back.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnBack;
                 @Back.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnBack;
                 @Back.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnBack;
+                @MousePos.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMousePos;
+                @MousePos.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMousePos;
+                @MousePos.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMousePos;
             }
             m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
@@ -300,6 +326,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Back.started += instance.OnBack;
                 @Back.performed += instance.OnBack;
                 @Back.canceled += instance.OnBack;
+                @MousePos.started += instance.OnMousePos;
+                @MousePos.performed += instance.OnMousePos;
+                @MousePos.canceled += instance.OnMousePos;
             }
         }
     }
@@ -341,6 +370,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnBack(InputAction.CallbackContext context);
+        void OnMousePos(InputAction.CallbackContext context);
     }
     public interface IScreenActions
     {

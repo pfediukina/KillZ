@@ -10,6 +10,8 @@ public class Player : Unit
 {
     [SerializeField] private CinemachineVirtualCamera _camera;
     [SerializeField] private PlayerInput _input;
+    [SerializeField] private NetworkAnimator _anim;
+
     public PlayerUI UI
     {
         get
@@ -30,6 +32,7 @@ public class Player : Unit
     {
         base.Awake();
         _input.OnBackPressed += PressedMenu;
+        _input.OnViewChanged += ctx => _anim.CalculateAndRotateWeapon(ctx, Object);
     }
 
     private void Start()
