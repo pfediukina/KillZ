@@ -10,7 +10,19 @@ public class Player : Unit
 {
     [SerializeField] private CinemachineVirtualCamera _camera;
     [SerializeField] private PlayerInput _input;
-    public PlayerUI UI { get; set; }
+    public PlayerUI UI
+    {
+        get
+        {
+            if (_ui != null)
+                return _ui;
+            else
+                _ui = FindObjectOfType<PlayerUI>();
+            return _ui;
+
+        }
+    }
+    private PlayerUI _ui;
 
     public Action OnPlayerPressedMenu;
 
@@ -32,12 +44,7 @@ public class Player : Unit
     {
         if (HasInputAuthority)
         {
-            if (UI != null)
-                UI.SwitchPlayerMenu();
-            else
-            {
-                Debug.Log("Null ui");
-            }
+            UI.SwitchPlayerMenu();
         }
     }
 
