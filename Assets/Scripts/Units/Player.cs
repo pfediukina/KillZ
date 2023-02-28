@@ -31,8 +31,11 @@ public class Player : Unit
     protected override void Awake()
     {
         base.Awake();
+        States.AddState(new MoveState(this));
+
         _input.OnBackPressed += PressedMenu;
         _input.OnViewChanged += _anim.CalculateAndRotateWeapon;
+        _input.OnViewChanged += UI.FollowPoint;
     }
 
     private void Start()

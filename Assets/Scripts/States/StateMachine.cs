@@ -65,8 +65,8 @@ public class StateMachine : NetworkBehaviour
     {
         _statesMap = new Dictionary<Type, IState>();
 
-        _statesMap[typeof(IdleState)] = new IdleState(_unit);
-        _statesMap[typeof(MoveState)] = new MoveState(_unit);
+        AddState(new IdleState(_unit));
+        //AddState(new MoveState(_unit));
     }
 
     private void SetStateByDefault()

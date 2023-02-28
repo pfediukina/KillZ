@@ -12,15 +12,19 @@ using WebSocketSharp;
 public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private GameMaster _GM;
     //[SerializeField] private PlayerUI _ui;
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public static List<Transform> Chars = new List<Transform>();
 
     private NetworkRunner _runner;
 
     private void Awake()
     {
         _runner = GetComponent<NetworkRunner>();
+        _spawnedCharacters.Clear();
+        Chars.Clear();
     }
 
     public void Start()
@@ -48,6 +52,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         }) ;
         LoadingScreen.EnableLoading(false);
+        _GM.StartGame();
     }
 
     public async void JoinGame(string session)
@@ -79,6 +84,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
             // Keep track of the player avatars so we can remove it when they disconnect
             _spawnedCharacters.Add(player, networkPlayerObject);
+            Chars.Add(networkPlayerObject.transform);
         }
     }
 

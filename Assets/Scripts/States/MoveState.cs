@@ -31,7 +31,6 @@ public class MoveState : IState
     public void Update()
     {
         if (Data.Direction.x != 0) _animator.RPC_Flip(Data.Direction.x > 0 ? false : true);
-
         _unit.transform.Translate(Data.Direction * 5 * _unit.Runner.DeltaTime);
     }
 }
