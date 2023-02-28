@@ -12,6 +12,8 @@ public class ZombieFactory : BaseFactory<Enemy>
     [SerializeField] private float spawnTime = 5;
     [SerializeField] private int startAmount = 3;
 
+    private float SpawnX;
+
     private void Awake()
     {
         FactoryObjects = InitPool((int)(60 / spawnTime) + startAmount + 3, transform);
@@ -19,6 +21,7 @@ public class ZombieFactory : BaseFactory<Enemy>
 
     public void StartSpawn()
     {
+        SpawnX = transform.position.x;
         StartCoroutine(SpawnZombieTimer());
         SpawnInitialZombies();
     }
@@ -36,7 +39,9 @@ public class ZombieFactory : BaseFactory<Enemy>
 
     private void SpawnZombie()
     {
+        SpawnX += 2;
         Enemy enemy = FactoryObjects.Get();
+        enemy.transform.position += Vector3.right * SpawnX;
         enemy.transform.parent = transform;
     }
 
