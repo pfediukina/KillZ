@@ -15,12 +15,10 @@ public class StateMachine : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
 
-        if (CurrentState != null &&
-            Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data))
+        if (CurrentState != null)
         {
-            CurrentState.Data = data;
+            //CurrentState.Data = data;
             CurrentState.Update();
-            //Debug.Log(CurrentState.GetType());
         }
     }
 
@@ -51,7 +49,6 @@ public class StateMachine : NetworkBehaviour
     public void SetState<T>(NetworkInputData data) where T : IState
     {
         var newState = GetState<T>();
-        newState.Data = data;
         SetState<T>();
     }
 

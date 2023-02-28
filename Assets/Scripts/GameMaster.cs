@@ -17,7 +17,7 @@ public class GameMaster : NetworkBehaviour
 
     public void StartGame()
     {
-        _testEnemy.FollowTarget(Launcher.Chars[0].transform);
+        _testEnemy.FollowNearestPlayer();
         EnableTimer = true;
         StartCoroutine(GameTimer());
     }

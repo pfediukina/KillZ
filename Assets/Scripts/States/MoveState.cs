@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class MoveState : IState
 {
-    public NetworkInputData Data { get; set; }
+    public NetworkInputData Data { get; private set; }
 
     private int _animationID = Animator.StringToHash("Move");
     private NetworkAnimator _animator;
@@ -30,6 +30,7 @@ public class MoveState : IState
 
     public void Update()
     {
+        if (!_unit.Runner.TryGetInputForPlayer<NetworkInputData>(_unit.Object.InputAuthority, out var Data)) return;
         if (Data.Direction.x != 0) _animator.RPC_Flip(Data.Direction.x > 0 ? false : true);
         _unit.transform.Translate(Data.Direction * 5 * _unit.Runner.DeltaTime);
     }

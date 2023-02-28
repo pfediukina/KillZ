@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public interface IState
 {
-    public NetworkInputData Data { get; set; }
+    //public NetworkInputData Data { get; set; }
     public void Enter();
     public void Exit();
     public void Update();

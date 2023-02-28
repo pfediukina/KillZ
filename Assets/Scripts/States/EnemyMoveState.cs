@@ -23,10 +23,10 @@ public class EnemyMoveState : IState
 
     public void Update()
     {
-        if(Follow != null)
+        if (Follow != null)
         {
-            Debug.Log(Follow.position);
-            Vector3.MoveTowards(_unit.transform.position, Follow.position, _unit.Runner.DeltaTime);
+            //Debug.Log("Follow");
+            _unit.transform.position = Vector3.MoveTowards(_unit.transform.position, Follow.position, _unit.Runner.DeltaTime);
         }
     }
 }

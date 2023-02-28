@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class IdleState : IState
-{
-    public NetworkInputData Data { get; set; }
-
-    private NetworkAnimator _animator;
+{    private NetworkAnimator _animator;
     private Unit _unit;
     private int _animationID = Animator.StringToHash("Idle");
 
