@@ -80,7 +80,8 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
             // Keep track of the player avatars so we can remove it when they disconnect
             _spawnedCharacters.Add(player, networkPlayerObject);
-            networkPlayerObject.GetComponent<Player>().OnPlayerPressedMenu += _ui.SwitchPlayerMenu;
+           // networkPlayerObject.GetComponent<Player>().OnPlayerPressedMenu += _ui.SwitchPlayerMenu;
+            networkPlayerObject.GetComponent<Player>().UI = _ui;
         }
     }
 

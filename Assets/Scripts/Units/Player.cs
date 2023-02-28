@@ -10,6 +10,7 @@ public class Player : Unit
 {
     [SerializeField] private CinemachineVirtualCamera _camera;
     [SerializeField] private PlayerInput _input;
+    public PlayerUI UI { get; set; }
 
     public Action OnPlayerPressedMenu;
 
@@ -31,7 +32,12 @@ public class Player : Unit
     {
         if (HasInputAuthority)
         {
-            OnPlayerPressedMenu?.Invoke();
+            if (UI != null)
+                UI.SwitchPlayerMenu();
+            else
+            {
+                Debug.Log("Null ui");
+            }
         }
     }
 
