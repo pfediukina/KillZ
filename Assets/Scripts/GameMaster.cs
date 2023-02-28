@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameMaster : NetworkBehaviour
 {
     [SerializeField] private Enemy _testEnemy;
+    [SerializeField] private ZombieFactory _zombieFactory;
 
     public static int CurrentTime { get; private set; }
     public static bool EnableTimer = false;
@@ -15,9 +16,15 @@ public class GameMaster : NetworkBehaviour
         CurrentTime = 0;
     }
 
+    private void Update()
+    {
+        if(CurrentTime == 60)
+            _zombieFactory.EndSpawn();
+    }
+
     public void StartGame()
     {
-        _testEnemy.FollowNearestPlayer();
+        _zombieFactory.StartSpawn();
         EnableTimer = true;
         StartCoroutine(GameTimer());
     }
