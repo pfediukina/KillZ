@@ -40,7 +40,8 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 
     private void Update()
     {
-        OnViewChanged?.Invoke(_actions.Keyboard.MousePos.ReadValue<Vector2>());
+        if(HasInputAuthority)
+            OnViewChanged?.Invoke(_actions.Keyboard.MousePos.ReadValue<Vector2>());
     }
 
     private void Start()

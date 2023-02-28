@@ -32,7 +32,7 @@ public class Player : Unit
     {
         base.Awake();
         _input.OnBackPressed += PressedMenu;
-        _input.OnViewChanged += ctx => _anim.CalculateAndRotateWeapon(ctx, Object);
+        _input.OnViewChanged += _anim.CalculateAndRotateWeapon;
     }
 
     private void Start()
