@@ -14,18 +14,18 @@ public class ZombieFactory : BaseFactory<Enemy>
 
     private void Awake()
     {
-        //FactoryObjects = InitPool((int)(60 / spawnTime) + startAmount + 3, transform);
+        FactoryObjects = InitPool((int)(60 / spawnTime) + startAmount + 3, transform);
     }
 
     public void StartSpawn()
     {
-        //StartCoroutine(SpawnZombieTimer());
+        StartCoroutine(SpawnZombieTimer());
         SpawnInitialZombies();
     }
 
     public void EndSpawn()
     {
-        //StopCoroutine(SpawnZombieTimer());
+        StopCoroutine(SpawnZombieTimer());
     }
 
     private void SpawnInitialZombies()
@@ -36,13 +36,16 @@ public class ZombieFactory : BaseFactory<Enemy>
 
     private void SpawnZombie()
     {
-        Enemy enemy = Runner.Spawn(Prefab, transform.position);
+        Enemy enemy = FactoryObjects.Get();
         enemy.transform.parent = transform;
     }
 
     private IEnumerator SpawnZombieTimer()
     {
-        yield return new WaitForSeconds(spawnTime);
-        SpawnZombie();
+        while (true)
+        {
+            yield return new WaitForSeconds(spawnTime);
+            SpawnZombie();
+        }
     }
 }
