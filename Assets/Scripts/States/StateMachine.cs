@@ -63,7 +63,7 @@ public class StateMachine : NetworkBehaviour
         _statesMap = new Dictionary<Type, IState>();
 
         AddState(new IdleState(_unit));
-        //AddState(new MoveState(_unit));
+        AddState(new DeadState(_unit));
     }
 
     private void SetStateByDefault()

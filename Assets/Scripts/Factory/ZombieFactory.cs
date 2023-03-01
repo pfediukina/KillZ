@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
 
-public class ZombieFactory : BaseFactory<Enemy>
+public class ZombieFactory : BaseFactory<StartZombie>
 {
-    [SerializeField] private float spawnTime = 5;
-    [SerializeField] private int startAmount = 3;
+    [SerializeField] private float _spawnTime = 5;
+    [SerializeField] private int _startAmount = 3;
     [SerializeField] private float _radius = 10;
     [SerializeField] private float _angleOffset = 10;
     private float _currentAngle;
@@ -19,36 +19,26 @@ public class ZombieFactory : BaseFactory<Enemy>
 
     private void Awake()
     {
-        FactoryObjects = InitPool((int)(60 / spawnTime) + startAmount + 3, transform);
+        FactoryObjects = InitPool((int)(60 / _spawnTime) + _startAmount + 3);
+        OnObjectSpawned += OnZombieSpawned;
     }
 
     public void StartSpawn()
     {
-        _spawnTimer = StartCoroutine(SpawnZombieTimer());
-        SpawnInitialZombies();
+        StartSpawnTimer(_spawnTime);
+        SpawnObjects(_startAmount, GetSpawnPosition());
     }
 
     public void EndSpawn()
     {
-        StopCoroutine(_spawnTimer);
-        foreach(var zombie in Objects)
-        {
-            FactoryObjects.Release(zombie);
-        }
+        NewSpawnPos = Vector3.zero;
+        StopSpawnTimer();
+        DespawnObjects();
     }
 
-    private void SpawnInitialZombies()
+    private void OnZombieSpawned()
     {
-        for (int i = 0; i < startAmount; i++)
-            SpawnZombie();
-    }
-
-    private void SpawnZombie()
-    {
-        Enemy enemy = FactoryObjects.Get();
-        enemy.transform.position = GetSpawnPosition();
-        enemy.transform.parent = transform;
-        Objects.Add(enemy);
+        NewSpawnPos = GetSpawnPosition();
     }
 
     private Vector3 GetSpawnPosition()
@@ -59,15 +49,5 @@ public class ZombieFactory : BaseFactory<Enemy>
         _currentAngle += _angleOffset;
         _currentAngle %= 360;
         return pos;
-    }
-
-    private IEnumerator SpawnZombieTimer()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(spawnTime);
-            
-            SpawnZombie();
-        }
     }
 }

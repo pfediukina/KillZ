@@ -2,6 +2,7 @@ using Cinemachine;
 using Fusion;
 using JetBrains.Annotations;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 //[RequireComponent(typeof(PlayerInput))]
@@ -9,8 +10,25 @@ using UnityEngine;
 public class Player : Unit
 {
     [SerializeField] private CinemachineVirtualCamera _camera;
-    [SerializeField] private PlayerInput _input;
     [SerializeField] private NetworkAnimator _anim;
+
+    public Transform WeaponPlace;
+
+    public BaseWeapon Weapon { get; set; }
+
+    public PlayerInput Input
+    {
+        get
+        {
+            if (_input != null)
+                return _input;
+            else
+                _input = GetComponent<PlayerInput>();
+            return _input;
+
+        }
+    }
+    private PlayerInput _input;
 
     public PlayerUI UI
     {
@@ -33,11 +51,18 @@ public class Player : Unit
         base.Awake();
         States.AddState(new MoveState(this));
 
-        _input.OnBackPressed += PressedMenu;
-        _input.OnViewChanged += _anim.CalculateAndRotateWeapon;
-        _input.OnViewChanged += UI.FollowPoint;
-    }
+        Input.OnAttackPressed += ctx =>
+        {
+            if (Weapon != null)
+            {
+                Weapon.Shoot(ctx);
+            }
+        };
 
+        Input.OnBackPressed += PressedMenu;
+        Input.OnViewChanged += ctx => { if (Weapon != null) _anim.CalculateAndRotateWeapon(ctx, Weapon.GetSprite()); };
+        Input.OnViewChanged += UI.FollowPoint;
+    }
     private void Start()
     {
         if (HasInputAuthority)

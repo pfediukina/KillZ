@@ -13,6 +13,8 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private GameMaster _GM;
+    [SerializeField] private WeaponSpawner _weapon;
+
     //[SerializeField] private PlayerUI _ui;
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
@@ -85,26 +87,23 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             // Keep track of the player avatars so we can remove it when they disconnect
             _spawnedCharacters.Add(player, networkPlayerObject);
             Chars.Add(networkPlayerObject.transform);
+            var p = networkPlayerObject.GetComponent<Player>();
+            p.Weapon = _weapon.GivePlayerWeapon(p.WeaponPlace);
         }
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        // Find and remove the players avatar
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
         {
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
+            Chars.Remove(networkObject.transform);
         }
     }
 
-    public void OnInput(NetworkRunner runner, NetworkInput input) 
-    {
-        var data = new NetworkInputData();
-        input.Set(data);
-    }
-
     #region UNUSED
+    public void OnInput(NetworkRunner runner, NetworkInput input) { }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 

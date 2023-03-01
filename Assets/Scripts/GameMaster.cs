@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameMaster : NetworkBehaviour
 {
-    [SerializeField] private Enemy _testEnemy;
+    [SerializeField] private StartZombie _testEnemy;
     [SerializeField] private ZombieFactory _zombieFactory;
 
     public static int CurrentTime { get; private set; }
@@ -27,7 +27,7 @@ public class GameMaster : NetworkBehaviour
         while(EnableTimer)
         { 
             yield return new WaitForSecondsRealtime(1);
-            TimeTestEvent();
+            //TimeTestEvent();
             CurrentTime++;
         }
     }
@@ -35,9 +35,9 @@ public class GameMaster : NetworkBehaviour
     //wip
     private void TimeTestEvent()
     {
-        if (CurrentTime == 10)
+        if (CurrentTime == 5)
             _zombieFactory.StartSpawn();
-        else if (CurrentTime == 30)
+        else if (CurrentTime == 10)
             _zombieFactory.EndSpawn();
     }
 }

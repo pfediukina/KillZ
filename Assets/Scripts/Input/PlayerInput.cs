@@ -8,6 +8,7 @@ using UnityEngine.Windows;
 public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 {
     public Action OnBackPressed;
+    public Action<Vector2> OnAttackPressed;
     public Action<Vector2> OnViewChanged;
 
     private IPlayerInput _keys;
@@ -38,10 +39,16 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
         }
     }
 
+    //wip
     private void Update()
     {
-        if(HasInputAuthority)
+        if (HasInputAuthority)
+        {
             OnViewChanged?.Invoke(_actions.Keyboard.MousePos.ReadValue<Vector2>());
+
+            if(_actions.Keyboard.Attack.IsPressed())
+                OnAttackPressed?.Invoke(_actions.Keyboard.MousePos.ReadValue<Vector2>());
+        }
     }
 
     private void Start()

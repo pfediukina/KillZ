@@ -53,6 +53,15 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""b323aa81-fb07-4cc5-a3ae-61ec8101a58a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -187,6 +196,17 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""action"": ""MousePos"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c8ca91e-ce1c-4d97-9302-4a6e8fdf91d3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -226,6 +246,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         m_Keyboard_Movement = m_Keyboard.FindAction("Movement", throwIfNotFound: true);
         m_Keyboard_Back = m_Keyboard.FindAction("Back", throwIfNotFound: true);
         m_Keyboard_MousePos = m_Keyboard.FindAction("MousePos", throwIfNotFound: true);
+        m_Keyboard_Attack = m_Keyboard.FindAction("Attack", throwIfNotFound: true);
         // Screen
         m_Screen = asset.FindActionMap("Screen", throwIfNotFound: true);
         m_Screen_Movement = m_Screen.FindAction("Movement", throwIfNotFound: true);
@@ -291,6 +312,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_Movement;
     private readonly InputAction m_Keyboard_Back;
     private readonly InputAction m_Keyboard_MousePos;
+    private readonly InputAction m_Keyboard_Attack;
     public struct KeyboardActions
     {
         private @PlayerActions m_Wrapper;
@@ -298,6 +320,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Keyboard_Movement;
         public InputAction @Back => m_Wrapper.m_Keyboard_Back;
         public InputAction @MousePos => m_Wrapper.m_Keyboard_MousePos;
+        public InputAction @Attack => m_Wrapper.m_Keyboard_Attack;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -316,6 +339,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @MousePos.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMousePos;
                 @MousePos.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMousePos;
                 @MousePos.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMousePos;
+                @Attack.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
             }
             m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
@@ -329,6 +355,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @MousePos.started += instance.OnMousePos;
                 @MousePos.performed += instance.OnMousePos;
                 @MousePos.canceled += instance.OnMousePos;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
             }
         }
     }
@@ -371,6 +400,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnBack(InputAction.CallbackContext context);
         void OnMousePos(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
     public interface IScreenActions
     {
