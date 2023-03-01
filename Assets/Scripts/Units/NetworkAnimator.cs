@@ -10,16 +10,16 @@ public class NetworkAnimator : NetworkBehaviour
 
     [Networked] public float WeaponZRotation { get; set; }
 
-    private SpriteRenderer _weaponSprite;
+    public SpriteRenderer WeaponSprite;
 
     public void CalculateAndRotateWeapon(Vector2 mousePos, SpriteRenderer weapon)
     {
         if (weapon == null) return;
-        if (_weaponSprite == null) _weaponSprite = weapon;
+        if (WeaponSprite == null) WeaponSprite = weapon;
         if (HasInputAuthority)
         {
             Vector2 weaponPos = Camera.main.WorldToScreenPoint(weapon.transform.position);
-            WeaponZRotation = Mathf.Atan2(mousePos.y - weaponPos.y, mousePos.x - weaponPos.x) * Mathf.Rad2Deg + (_weaponSprite.flipX ? 180 : 0);
+            WeaponZRotation = Mathf.Atan2(mousePos.y - weaponPos.y, mousePos.x - weaponPos.x) * Mathf.Rad2Deg + (WeaponSprite.flipX ? 180 : 0);
             RPC_RotateWeapon(WeaponZRotation);
         }
         else
@@ -36,8 +36,8 @@ public class NetworkAnimator : NetworkBehaviour
     public void RPC_Flip(bool flip)
     {
         _sprite.flipX = flip;
-        if(_weaponSprite != null)
-            _weaponSprite.flipX = flip;
+        if(WeaponSprite != null)
+            WeaponSprite.flipX = flip;
     }
 
     [Rpc]
@@ -48,10 +48,10 @@ public class NetworkAnimator : NetworkBehaviour
 
     private void RotateWeapon(float rot)
     {
-        if (_weaponSprite == null) return;
-        _weaponSprite.transform.eulerAngles = Vector3.forward * rot;
-        if (_weaponSprite.flipX) _weaponSprite.flipY = true;
-        else _weaponSprite.flipY = false;
+        if (WeaponSprite == null) return;
+        WeaponSprite.transform.eulerAngles = Vector3.forward * rot;
+        if (WeaponSprite.flipX) WeaponSprite.flipY = true;
+        else WeaponSprite.flipY = false;
     }
 
 }

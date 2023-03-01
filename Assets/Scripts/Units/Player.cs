@@ -79,6 +79,7 @@ public class Player : Unit
         Input.OnViewChanged += ctx => { if (Weapon != null) _anim.CalculateAndRotateWeapon(ctx, Weapon.GetSprite()); };
         Input.OnViewChanged += UI.FollowPoint;
     }
+
     private void Start()
     {
         if (HasInputAuthority)

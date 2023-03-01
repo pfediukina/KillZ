@@ -26,5 +26,6 @@ public class Bullet : NetworkBehaviour
     public void MoveTo(Vector3 pos)
     {
         _movePos = pos;
+        StartMove = true;
     }
 }

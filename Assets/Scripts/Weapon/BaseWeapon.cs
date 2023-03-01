@@ -15,8 +15,11 @@ public class BaseWeapon : NetworkBehaviour
 
     public static void OnOwnerChange(Changed<BaseWeapon> changed)
     {
-        changed.Behaviour.transform.parent = changed.Behaviour.Runner.FindObject(changed.Behaviour.ID).GetComponent<Player>().WeaponPlace;
+        var player = changed.Behaviour.Runner.FindObject(changed.Behaviour.ID).GetComponent<Player>();
+        changed.Behaviour.transform.parent = player.WeaponPlace;
         changed.Behaviour.transform.localPosition = Vector3.zero;
+        player.GetComponent<NetworkAnimator>().WeaponSprite = changed.Behaviour.GetSprite();
+
     }
 
     public virtual void Shoot(Vector2 mousePos)
@@ -24,8 +27,18 @@ public class BaseWeapon : NetworkBehaviour
         if(_canShoot)
         {
             var v = GetShootDirection(mousePos);
-            //RPC_Fire(v);
+            RPC_Fire(v);
             StartCoroutine(FireReload());
+        }
+    }
+
+    [Rpc]
+    private void RPC_Fire(Vector3 dir)
+    {
+        if(HasStateAuthority)
+        {
+            var shot = Runner.Spawn(_bulletPref, transform.position);
+            shot.MoveTo(dir);
         }
     }
 
