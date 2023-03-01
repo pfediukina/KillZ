@@ -134,6 +134,8 @@ MonoBehaviour:
   _sprite: {fileID: 6561487306160793167}
   _reload: 0.3
   _bulletPref: {fileID: 9145170557020845749, guid: 1f1868721dfbc924a92075ed86bb8e46, type: 3}
+  _ID:
+    Raw: 0
   _canShoot: 1
 --- !u!114 &7231682999607830965
 MonoBehaviour:

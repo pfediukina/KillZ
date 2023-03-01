@@ -87,8 +87,8 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             // Keep track of the player avatars so we can remove it when they disconnect
             _spawnedCharacters.Add(player, networkPlayerObject);
             Chars.Add(networkPlayerObject.transform);
-            var p = networkPlayerObject.GetComponent<Player>();
-            _weapon.GivePlayerWeapon(p.WeaponPlace);
+
+            _weapon.GivePlayerWeapon(networkPlayerObject.GetComponent<Player>());
         }
     }
 

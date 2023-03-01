@@ -5,11 +5,10 @@ public class WeaponSpawner : NetworkBehaviour
 {
     [SerializeField] private BaseWeapon[] _weapons;
 
-    public void GivePlayerWeapon(Transform weaponPlace)
+    public void GivePlayerWeapon(Player player)
     {
         int rand = Random.Range(0, _weapons.Length);
-        BaseWeapon weapon = Runner.Spawn(_weapons[rand], weaponPlace.position);
-        weapon.Parent = weaponPlace;
-        weapon.RPC_Setparent();
+        BaseWeapon weapon = Runner.Spawn(_weapons[rand]);
+        weapon.ID = player.Object.Id; 
     }
 }

@@ -9,23 +9,22 @@ public class BaseWeapon : NetworkBehaviour
     [SerializeField] private float _reload = 0.3f;
     [SerializeField] private Bullet _bulletPref;
 
-    public Transform Parent { get; set; }
+    [Networked(OnChanged = nameof(OnOwnerChange))] public NetworkId ID { get; set; }
     public SpriteRenderer GetSprite() => _sprite;
     public bool _canShoot = true;
 
-    [Rpc]
-    public void RPC_Setparent()
+    public static void OnOwnerChange(Changed<BaseWeapon> changed)
     {
-        transform.parent = Parent;
+        changed.Behaviour.transform.parent = changed.Behaviour.Runner.FindObject(changed.Behaviour.ID).GetComponent<Player>().WeaponPlace;
+        changed.Behaviour.transform.localPosition = Vector3.zero;
     }
 
     public virtual void Shoot(Vector2 mousePos)
     {
         if(_canShoot)
         {
-            Debug.Log("Shoot");
             var v = GetShootDirection(mousePos);
-            RPC_Fire(v);
+            //RPC_Fire(v);
             StartCoroutine(FireReload());
         }
     }
@@ -35,14 +34,6 @@ public class BaseWeapon : NetworkBehaviour
         var v = Camera.main.ScreenToWorldPoint(mousePos);
         v.z = transform.position.z;
         return v;
-    }
-
-    private void RPC_Fire(Vector3 dir)
-    {
-        var b = Runner.Spawn(_bulletPref);
-        b.transform.position = transform.position;
-        b.MoveTo(dir);
-        b.StartMove = true;
     }
 
     private IEnumerator FireReload()

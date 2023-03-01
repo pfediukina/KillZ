@@ -24,6 +24,11 @@ public class Player : Unit
                 _weapon = WeaponPlace.GetComponentInChildren<BaseWeapon>();
             return _weapon;
         }
+        set
+        {
+            _weapon = value;
+            _weapon.transform.parent = WeaponPlace;
+        }
     }
     private BaseWeapon _weapon;
 
