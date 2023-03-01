@@ -14,7 +14,18 @@ public class Player : Unit
 
     public Transform WeaponPlace;
 
-    public BaseWeapon Weapon { get; set; }
+    public BaseWeapon Weapon
+    {
+        get
+        {
+            if (_weapon != null)
+                return _weapon;
+            else
+                _weapon = WeaponPlace.GetComponentInChildren<BaseWeapon>();
+            return _weapon;
+        }
+    }
+    private BaseWeapon _weapon;
 
     public PlayerInput Input
     {

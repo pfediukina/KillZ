@@ -9,9 +9,15 @@ public class BaseWeapon : NetworkBehaviour
     [SerializeField] private float _reload = 0.3f;
     [SerializeField] private Bullet _bulletPref;
 
-
+    public Transform Parent { get; set; }
     public SpriteRenderer GetSprite() => _sprite;
     public bool _canShoot = true;
+
+    [Rpc]
+    public void RPC_Setparent()
+    {
+        transform.parent = Parent;
+    }
 
     public virtual void Shoot(Vector2 mousePos)
     {

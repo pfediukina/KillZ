@@ -88,7 +88,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Add(player, networkPlayerObject);
             Chars.Add(networkPlayerObject.transform);
             var p = networkPlayerObject.GetComponent<Player>();
-            p.Weapon = _weapon.GivePlayerWeapon(p.WeaponPlace);
+            _weapon.GivePlayerWeapon(p.WeaponPlace);
         }
     }
 
