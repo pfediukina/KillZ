@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
 
-public class ZombieFactory : BaseFactory<StartZombie>
+public class ZombieFactory : BaseFactory<Zombie>
 {
     [SerializeField] private float _spawnTime = 5;
     [SerializeField] private int _startAmount = 3;
     [SerializeField] private float _radius = 10;
     [SerializeField] private float _angleOffset = 10;
     private float _currentAngle;
-    private Coroutine _spawnTimer;
 
     private void Awake()
     {
-        FactoryObjects = InitPool((int)(60 / _spawnTime) + _startAmount + 3);
-        OnObjectSpawned += OnZombieSpawned;
+        int count = (int)(60 / _spawnTime) + _startAmount + 3;
+        FactoryObjects = InitPool(count);
+        OnObjectSpawned += () => { NewSpawnPos = GetSpawnPosition(); };
     }
 
     public void StartSpawn()
@@ -34,11 +34,6 @@ public class ZombieFactory : BaseFactory<StartZombie>
         NewSpawnPos = Vector3.zero;
         StopSpawnTimer();
         DespawnObjects();
-    }
-
-    private void OnZombieSpawned()
-    {
-        NewSpawnPos = GetSpawnPosition();
     }
 
     private Vector3 GetSpawnPosition()

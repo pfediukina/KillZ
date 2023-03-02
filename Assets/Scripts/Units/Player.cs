@@ -21,7 +21,10 @@ public class Player : Unit
             if (_weapon != null)
                 return _weapon;
             else
+            {
                 _weapon = WeaponPlace.GetComponentInChildren<BaseWeapon>();
+                _weapon.Reload = Info.AttackDelay;
+            }
             return _weapon;
         }
         set

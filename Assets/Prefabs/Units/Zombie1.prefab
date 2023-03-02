@@ -10,10 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3848227093265116873}
   - component: {fileID: 8414542014594305967}
+  - component: {fileID: 11269707527900035}
   - component: {fileID: 6330168330867440793}
   - component: {fileID: 7198567952426255754}
   - component: {fileID: 8258957040370376149}
   - component: {fileID: 1403139534791800539}
+  - component: {fileID: 3676333342179837521}
   - component: {fileID: 4814642583765456826}
   - component: {fileID: 2972420885547817101}
   m_Layer: 0
@@ -52,8 +54,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _info: {fileID: 11400000, guid: b731d3060966de545b5d89062b1f2fea, type: 2}
+  _info: {fileID: 11400000, guid: 34bb1742765f26844abeafacab32a705, type: 2}
+  _health: {fileID: 11269707527900035}
   _anim: {fileID: 7876598058688815572}
+  _networkRB: {fileID: 4814642583765456826}
+  _sprite: {fileID: 3848227094037181536}
+--- !u!114 &11269707527900035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3848227093265116870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: defbf3304460d634b8f5084712e088d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _maxHealth: 3
+  _CurrentHealth: 0
 --- !u!114 &6330168330867440793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,7 +110,9 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 8414542014594305967}
+  - {fileID: 11269707527900035}
   - {fileID: 6330168330867440793}
+  - {fileID: 3676333342179837521}
   - {fileID: 4814642583765456826}
   SimulationBehaviours: []
 --- !u!114 &8258957040370376149
@@ -130,6 +152,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &3676333342179837521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3848227093265116870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471f26ec2948cbc42b8aca1c6c305abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _animator: {fileID: 7876598058688815572}
+  _sprite: {fileID: 3848227094037181541}
+  _WeaponZRotation: 0
+  WeaponSprite: {fileID: 0}
 --- !u!114 &4814642583765456826
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,7 +14,6 @@ public class BaseFactory<T> : NetworkBehaviour where T : NetworkBehaviour, ISpaw
     protected HashSet<T> Objects = new HashSet<T>();
     protected Vector3 NewSpawnPos = Vector3.zero;
     protected Action OnObjectSpawned;
-    protected Action<ObjectPool<T>> OnObjectDespawned;
 
     private Coroutine _spawnTimer;
 
@@ -31,7 +30,7 @@ public class BaseFactory<T> : NetworkBehaviour where T : NetworkBehaviour, ISpaw
         return list;
     }
 
-    protected void SpawnObjects(int count, Vector3 startPos)
+    public void SpawnObjects(int count, Vector3 startPos)
     {
         NewSpawnPos = startPos;
         SpawnObject(NewSpawnPos);
@@ -39,30 +38,34 @@ public class BaseFactory<T> : NetworkBehaviour where T : NetworkBehaviour, ISpaw
             SpawnObject(NewSpawnPos);
     }
 
-    protected void DespawnObjects()
+    public void DespawnObjects()
     {
         foreach(var Object in Objects)
         {
-            Object.DespawnObject( () => { FactoryObjects.Release(Object); });
+            Object.DespawnObject();
         }
     }
 
-    protected void SpawnObject(Vector3 pos)
+    public void DespawnObject(T obj)
     {
-        T obj = FactoryObjects.Get();
-        obj.transform.position = pos;
-        obj.transform.parent = transform;
-        obj.SpawnObject();
-        Objects.Add(obj);
-        OnObjectSpawned?.Invoke();
+        FactoryObjects.Release(obj);
     }
 
-    protected void StartSpawnTimer(float time)
+    public void SpawnObject(Vector3 pos)
+    {
+        T obj = FactoryObjects.Get();
+        obj.SpawnObject(this, pos);
+        obj.transform.parent = transform;
+        OnObjectSpawned?.Invoke();
+        Objects.Add(obj);
+    }
+
+    public void StartSpawnTimer(float time)
     {
         _spawnTimer = StartCoroutine(SpawnObjectTimer(time));
     }
 
-    protected void StopSpawnTimer()
+    public void StopSpawnTimer()
     {
         StopCoroutine(_spawnTimer);
     }

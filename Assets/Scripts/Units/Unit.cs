@@ -7,6 +7,8 @@ using UnityEngine;
 public abstract class Unit : NetworkBehaviour
 {
     [SerializeField] protected UnitInfo _info;
+    [SerializeField] protected NetworkHealth _health;
+
     public virtual StateMachine States { get; private set; }
     public virtual UnitInfo Info => _info;
 

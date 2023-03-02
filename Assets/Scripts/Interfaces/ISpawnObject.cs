@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Fusion;
+using UnityEngine;
 
 public interface ISpawnObject
 {
-    public void DespawnObject(Action OnDespawned);
-    public void SpawnObject();
+    public void DespawnObject();
+    public void SpawnObject(NetworkBehaviour factory, Vector3 pos);
 }

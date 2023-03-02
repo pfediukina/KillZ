@@ -1,4 +1,5 @@
-﻿using Fusion;
+﻿
+using Fusion;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -6,8 +7,9 @@ using UnityEngine;
 public class BaseWeapon : NetworkBehaviour
 {
     [SerializeField] private SpriteRenderer _sprite;
-    [SerializeField] private float _reload = 0.3f;
     [SerializeField] private Bullet _bulletPref;
+
+    public float Reload;
 
     [Networked(OnChanged = nameof(OnOwnerChange))] public NetworkId ID { get; set; }
     public SpriteRenderer GetSprite() => _sprite;
@@ -39,6 +41,7 @@ public class BaseWeapon : NetworkBehaviour
         {
             var shot = Runner.Spawn(_bulletPref, transform.position);
             shot.MoveTo(dir);
+            shot.Owner = Runner.FindObject(ID).GetComponent<Player>();
         }
     }
 
@@ -52,7 +55,7 @@ public class BaseWeapon : NetworkBehaviour
     private IEnumerator FireReload()
     {
         _canShoot = false;
-        yield return new WaitForSeconds(_reload);
+        yield return new WaitForSeconds(Reload);
         _canShoot = true;
     }
 }

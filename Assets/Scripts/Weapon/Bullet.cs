@@ -12,12 +12,13 @@ public class Bullet : NetworkBehaviour
     private Vector3 _movePos;
 
     [HideInInspector] public bool StartMove = false;
-    
+    public Unit Owner { get; set; }
+
     private void Update()
     {
         if(StartMove)
             transform.position = Vector3.MoveTowards(transform.position, _movePos, Runner.DeltaTime * _speed);
-        if(Vector3.Distance(transform.position, _movePos) <= 0.1)
+        if(Vector3.Distance(transform.position, _movePos) <= 0)
         {
             Runner.Despawn(Object);
         }

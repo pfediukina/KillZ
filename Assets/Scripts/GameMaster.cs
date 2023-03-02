@@ -1,23 +1,30 @@
 using Fusion;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameMaster : NetworkBehaviour
 {
-    [SerializeField] private StartZombie _testEnemy;
+    [SerializeField] private Zombie _testEnemy;
     [SerializeField] private ZombieFactory _zombieFactory;
 
-    public static int CurrentTime { get; private set; }
-    public static bool EnableTimer = false;
+    public static Action<int> OnTimeChanged;
 
-    private void Start()
+    [Networked(OnChanged = nameof(TimeChanged))] public int CurrentTime { get; set; }
+    private int _time;
+
+    private static void TimeChanged(Changed<GameMaster> changed)
     {
-        CurrentTime = 0;
+        OnTimeChanged?.Invoke(changed.Behaviour.CurrentTime);
     }
+
+    public static bool EnableTimer = false;
 
     public void StartGame()
     {
+        CurrentTime = 0;
+        OnTimeChanged?.Invoke(CurrentTime);
         EnableTimer = true;
         StartCoroutine(GameTimer());
     }
@@ -27,7 +34,7 @@ public class GameMaster : NetworkBehaviour
         while(EnableTimer)
         { 
             yield return new WaitForSecondsRealtime(1);
-            //TimeTestEvent();
+            TimeTestEvent();
             CurrentTime++;
         }
     }
@@ -37,7 +44,7 @@ public class GameMaster : NetworkBehaviour
     {
         if (CurrentTime == 5)
             _zombieFactory.StartSpawn();
-        else if (CurrentTime == 10)
+        else if (CurrentTime == 40)
             _zombieFactory.EndSpawn();
     }
 }

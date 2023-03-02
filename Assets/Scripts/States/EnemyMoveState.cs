@@ -1,9 +1,4 @@
-﻿
-
-using Fusion;
-using System.Collections;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyMoveState : IState
 {
@@ -28,7 +23,7 @@ public class EnemyMoveState : IState
     {
         if (Follow != null)
         {
-            Vector2 vel = (Follow.position - _unit.transform.position).normalized;
+            Vector2 vel = (Follow.position - _unit.transform.position).normalized * _unit.Info.StartSpeed * _unit.Runner.DeltaTime;
             _rb.velocity = vel;
         }
     }

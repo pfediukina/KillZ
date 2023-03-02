@@ -16,20 +16,27 @@ public class PlayerUI : MonoBehaviour
     {
         Cursor.visible = false;
         _name.text = SessionInfo.SessionName;
+        GameMaster.OnTimeChanged += UpdateTime;
     }
 
     private void Update()
     {
         if (GameMaster.EnableTimer)
         { 
-                int minutes = GameMaster.CurrentTime / 60;
-            int seconds = GameMaster.CurrentTime % 60;
-            string text = minutes < 10 ? $"0{minutes}" : minutes.ToString();
-            text += ":";
-            text += seconds < 10 ? $"0{seconds}" : seconds.ToString();
+        //    int minutes = GameMaster.CurrentTime / 60;
+        //    int seconds = GameMaster.CurrentTime % 60;
+        //    string text = minutes < 10 ? $"0{minutes}" : minutes.ToString();
+        //    text += ":";
+        //    text += seconds < 10 ? $"0{seconds}" : seconds.ToString();
 
-            _timer.text = text;
+        //    _timer.text = text;
         }
+    }
+
+    public void UpdateTime(int time)
+    {
+        string text = System.TimeSpan.FromSeconds(time).ToString("mm':'ss");
+        _timer.text = text;
     }
 
     public void SwitchPlayerMenu()
