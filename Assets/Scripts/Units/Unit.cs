@@ -7,14 +7,15 @@ using UnityEngine;
 public abstract class Unit : NetworkBehaviour
 {
     [SerializeField] protected UnitInfo _info;
-    [SerializeField] protected NetworkHealth _health;
 
-    public virtual StateMachine States { get; private set; }
+    public NetworkHealth Health { get; private set; }
+    public StateMachine States { get; private set; }
     public virtual UnitInfo Info => _info;
 
     protected virtual void Awake()
     {
         States = GetComponent<StateMachine>();
+        Health = GetComponent<NetworkHealth>();
         States.Initialize(this);
     }
 }

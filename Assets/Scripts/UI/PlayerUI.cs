@@ -8,6 +8,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private CanvasGroup _menuCanvas;
     [SerializeField] private TextMeshProUGUI _name;
     [SerializeField] private TextMeshProUGUI _timer;
+    [SerializeField] private TextMeshProUGUI _ammo;
     [SerializeField] private Image _playerPointer;
 
     private bool _inMenu;
@@ -31,6 +32,11 @@ public class PlayerUI : MonoBehaviour
 
         //    _timer.text = text;
         }
+    }
+
+    public void ChangePlayerAmmo(int ammo, int maxAmmo)
+    {
+        _ammo.text = $"{ammo}/{maxAmmo}";
     }
 
     public void UpdateTime(int time)

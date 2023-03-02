@@ -29,7 +29,7 @@ public class Zombie : Unit, ISpawnObject
         if(collision.tag == "Bullet")
         {
             var bullet = collision.GetComponent<Bullet>();
-            _health.CurrentHealth--;
+            Health.CurrentHealth--;
             Runner.Despawn(bullet.Object);
         }
     }
@@ -79,7 +79,7 @@ public class Zombie : Unit, ISpawnObject
     {
         _networkRB.TeleportToPosition(pos);
         States.SetState<EnemyMoveState>();
-        _health.ResetHealth();
+        Health.ResetHealth();
         _ownedFactory = (BaseFactory<Zombie>)factory;
         StartCoroutine(SpawnSprite());
         

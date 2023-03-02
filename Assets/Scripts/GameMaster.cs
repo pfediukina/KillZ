@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GameMaster : NetworkBehaviour
 {
     [SerializeField] private Zombie _testEnemy;

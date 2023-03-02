@@ -33,6 +33,7 @@ public class Player : Unit
             _weapon.transform.parent = WeaponPlace;
         }
     }
+    public BaseWeapon CurrentWeapon => _weapon;
     private BaseWeapon _weapon;
 
     public PlayerInput Input
