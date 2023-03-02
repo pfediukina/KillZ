@@ -14,7 +14,15 @@ public class BaseWeapon : NetworkBehaviour
     
     public float Reload;
 
-    [Networked(OnChanged =nameof(AmmoChanged))] public int Ammo { get; set; }
+    public int Ammo { get => _ammo; 
+        set
+        {
+            _ammo = value;
+            AmmoChanged();
+        }
+    }
+    private int _ammo;
+
     [Networked(OnChanged = nameof(OnOwnerChange))] public NetworkId ID { get; set; }
 
     public SpriteRenderer GetSprite() => _sprite;
@@ -25,20 +33,22 @@ public class BaseWeapon : NetworkBehaviour
         Ammo = _maxAmmo;
     }
 
-    public static void AmmoChanged(Changed<BaseWeapon> changed)
+    public void AmmoChanged()
     {
-        changed.Behaviour.Ammo = Mathf.Clamp(changed.Behaviour.Ammo, 0, changed.Behaviour._maxAmmo);
-        changed.Behaviour.OnAmmoChanged?.Invoke(changed.Behaviour.Ammo, changed.Behaviour._maxAmmo);
+        _ammo = Mathf.Clamp(_ammo, 0, _maxAmmo);
+        OnAmmoChanged?.Invoke(_ammo, _maxAmmo);
     }
 
     public static void OnOwnerChange(Changed<BaseWeapon> changed)
     {
-
         var player = changed.Behaviour.Runner.FindObject(changed.Behaviour.ID).GetComponent<Player>();
         changed.Behaviour.transform.parent = player.WeaponPlace;
         changed.Behaviour.transform.localPosition = Vector3.zero;
         player.GetComponent<NetworkAnimator>().WeaponSprite = changed.Behaviour.GetSprite();
-        changed.Behaviour.OnAmmoChanged += player.UI.ChangePlayerAmmo;
+
+        if(player.HasInputAuthority)
+            changed.Behaviour.OnAmmoChanged += player.UI.ChangePlayerAmmo;
+        changed.Behaviour.OnAmmoChanged?.Invoke(changed.Behaviour.Ammo, changed.Behaviour._maxAmmo);
     }
 
     public virtual void Shoot(Vector2 mousePos)
