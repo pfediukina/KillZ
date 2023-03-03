@@ -14,8 +14,8 @@ TagManager:
   - UI
   - 
   - EnemyCollider
-  - 
-  - 
+  - EnemyAttackCollider
+  - PlayerCollider
   - 
   - 
   - 

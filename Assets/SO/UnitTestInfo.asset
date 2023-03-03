@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartSpeed: 5
   AttackDelay: 0.2
-  MaxHealth: 5
+  MaxHealth: 10

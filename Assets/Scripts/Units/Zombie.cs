@@ -45,6 +45,7 @@ public class Zombie : Unit, ISpawnObject
         Transform nearest = Launcher.Chars[0];
         foreach (var transf in Launcher.Chars)
         {
+            if (transf.GetComponent<Unit>().States.CurrentState is DeadState) continue;
             if (Vector3.Distance(nearest.position, transform.position) > Vector3.Distance(transf.position, transform.position))
             {
                 nearest = transf;

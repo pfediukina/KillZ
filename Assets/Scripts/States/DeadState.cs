@@ -26,6 +26,10 @@ public class DeadState : IState
         {
             (_unit as ISpawnObject).DespawnObject();
         }
+        else if(_unit is Player)
+        {
+            (_unit as Player).CurrentWeapon.gameObject.SetActive(false);
+        }
     }
 
     public void Exit()

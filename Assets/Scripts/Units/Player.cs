@@ -33,6 +33,7 @@ public class Player : Unit
             _weapon.transform.parent = WeaponPlace;
         }
     }
+
     public BaseWeapon CurrentWeapon => _weapon;
     private BaseWeapon _weapon;
 
@@ -73,7 +74,7 @@ public class Player : Unit
 
         Input.OnAttackPressed += ctx =>
         {
-            if (Weapon != null)
+            if (Weapon != null && States.CurrentState is not DeadState)
             {
                 Weapon.Shoot(ctx);
             }
@@ -90,6 +91,8 @@ public class Player : Unit
         {
             _camera.Priority = 10;
         }
+
+        Health.OnHealthChanged += UI.HealthUI.UpdateHealth;
     }
 
     private void PressedMenu()
@@ -102,7 +105,8 @@ public class Player : Unit
 
     public override void FixedUpdateNetwork()
     {
-        if (Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data))
+        if (Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data) &&
+            States.CurrentState is not DeadState)
         {
             if (data.Direction != Vector2.zero && States.CurrentState is not MoveState)
             {

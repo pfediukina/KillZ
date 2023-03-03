@@ -18,7 +18,8 @@ GameObject:
   - component: {fileID: 8258957040370376149}
   - component: {fileID: 7055589384417763255}
   - component: {fileID: 4338231268574116325}
-  m_Layer: 0
+  - component: {fileID: -7067250901137297042}
+  m_Layer: 9
   m_Name: Player1
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -110,6 +111,7 @@ MonoBehaviour:
   - {fileID: 6330168330867440793}
   - {fileID: 2735376734023496731}
   - {fileID: 8925132293088092826}
+  - {fileID: -7067250901137297042}
   SimulationBehaviours:
   - {fileID: 5635304161769832816}
 --- !u!114 &2735376734023496731
@@ -220,6 +222,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 7
+--- !u!114 &-7067250901137297042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3848227093265116870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: defbf3304460d634b8f5084712e088d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _maxHealth: 10
+  _CurrentHealth: 0
 --- !u!1 &3848227094037181536
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +248,7 @@ GameObject:
   - component: {fileID: 3848227094037181539}
   - component: {fileID: 3848227094037181541}
   - component: {fileID: 3848227094037181538}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -335,7 +352,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2733702648566908947}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,7 +385,7 @@ GameObject:
   - component: {fileID: 8508211243605281892}
   - component: {fileID: 1957729791425791456}
   - component: {fileID: 4820082621915320780}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +472,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1652762586172930269}
   - component: {fileID: 135132439499716738}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}

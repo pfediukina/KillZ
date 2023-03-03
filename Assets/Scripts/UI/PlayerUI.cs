@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +11,9 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _timer;
     [SerializeField] private TextMeshProUGUI _ammo;
     [SerializeField] private Image _playerPointer;
+    
+    //test
+    public PlayerHealthUI HealthUI;
 
     private bool _inMenu;
 
