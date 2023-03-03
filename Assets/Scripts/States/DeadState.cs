@@ -22,7 +22,7 @@ public class DeadState : IState
         {
             _animator.RPC_ChangeAnimationID(_animationID);
         }
-        if(_unit is not Player)
+        if (_unit is not Player)
         {
             (_unit as ISpawnObject).DespawnObject();
         }

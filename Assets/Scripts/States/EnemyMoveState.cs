@@ -4,18 +4,26 @@ public class EnemyMoveState : IState
 {
     public NetworkInputData Data { get; set; }
 
+    private NetworkAnimator _animator;
     private Unit _unit;
     private Rigidbody2D _rb;
     public Transform Follow;
+    private int _animationID = Animator.StringToHash("Move");
 
     public EnemyMoveState(Unit unit) 
     {
-        //_animator = unit.GetComponent<NetworkAnimator>();
+        _animator = unit.GetComponent<NetworkAnimator>();
         _unit = unit;
         _rb = unit.GetComponent<Rigidbody2D>();
     }
 
-    public void Enter() { }
+    public void Enter() 
+    {
+        if (_unit.Runner != null)
+        {
+            _animator.RPC_ChangeAnimationID(_animationID);
+        }
+    }
 
     public void Exit() { }
 
