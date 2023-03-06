@@ -37,7 +37,7 @@ public class GameManager : NetworkBehaviour
     {
         OnTimeChanged?.Invoke(CurrentTime);
         ShowAllPlayerGameText(GameText.Intro);
-        SpawnWave();
+        //SpawnWave();
         EnableTimer = true;
         StartCoroutine(GameTimer());
     }

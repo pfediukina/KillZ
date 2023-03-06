@@ -57,6 +57,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _info: {fileID: 11400000, guid: b731d3060966de545b5d89062b1f2fea, type: 2}
+  _Score: 0
   _camera: {fileID: 135132439499716738}
   _anim: {fileID: 2735376734023496731}
   WeaponPlace: {fileID: 2733702648566908947}
@@ -146,7 +147,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   InterpolationSpace: 0
   InterpolationTarget: {fileID: 3848227094037181539}
-  InterpolateErrorCorrection: 1
+  InterpolateErrorCorrection: 0
   InterpolatedErrorCorrectionSettings:
     MinRate: 3.3
     MaxRate: 10
@@ -235,7 +236,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _maxHealth: 10
   _CurrentHealth: 0
 --- !u!1 &3848227094037181536
 GameObject:

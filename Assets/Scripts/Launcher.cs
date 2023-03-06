@@ -24,7 +24,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Awake()
     {
-        LoadingScreen.EnableLoading(true);
+        
         _runner = GetComponent<NetworkRunner>();
         _spawnedCharacters.Clear();
         Chars.Clear();
@@ -32,7 +32,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 
     public void Start()
     {
-
+        LoadingScreen.EnableLoading(true);
         if (SessionInfo.isConnect)
         {
             JoinGame(SessionInfo.SessionName);

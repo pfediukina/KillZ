@@ -126,10 +126,28 @@ public class Player : Unit
         };
         Input.OnViewChanged += ctx => { if (Weapon != null) _anim.CalculateAndRotateWeapon(ctx, Weapon.GetSprite()); };
         Input.OnViewChanged += UI.FollowPoint;
-        Input.OnMoved += GetPlayerInput;
+        //Input.OnMoved += GetPlayerInput;
         Input.OnBackPressed += () =>  UI.MenuUI.EnableMenu(!UI.MenuUI.IsOpened);
 
         Health.OnHealthChanged += UI.HealthUI.UpdateHealth;
         UI.MenuUI.OnDisconnect += OnDisconnect;
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (States.CurrentState is DeadState) return;
+        if (Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data))
+        {
+
+            States.GetState<MoveState>().Direction = data.Direction;
+            if (data.Direction != Vector2.zero && States.CurrentState is not MoveState)
+            {
+                States.SetState<MoveState>();
+            }
+            else if (data.Direction == Vector2.zero && States.CurrentState is not IdleState)
+            {
+                States.SetState<IdleState>();
+            }
+        }
     }
 }

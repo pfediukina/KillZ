@@ -34,7 +34,6 @@ public class MoveState : IState
     {
         if (!_unit.Runner.TryGetInputForPlayer<NetworkInputData>(_unit.Object.InputAuthority, out var Data)) return;
         if (Data.Direction.x != 0) RPCList.RPC_FlipSprite(_sprite, Data.Direction.x > 0 ? false : true);
-
-        RPCList.RPC_UnitMove(_unit, Direction.normalized); 
+        _unit.transform.Translate(Data.Direction * 5 * _unit.Runner.DeltaTime);
     }
 }
