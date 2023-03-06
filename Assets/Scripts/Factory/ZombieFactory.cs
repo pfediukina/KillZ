@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
 
-public class ZombieFactory : BaseFactory<Zombie>
+public class ZombieFactory : BaseFactory<Enemy>
 {
     [SerializeField] private float _spawnTime = 5;
     [SerializeField] private int _startAmount = 3;

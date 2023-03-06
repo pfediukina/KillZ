@@ -7,8 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class ZombieAttack : NetworkBehaviour
+public class EnemyAttack : NetworkBehaviour
 {
+    [SerializeField]private Enemy _enemy;
+
     private bool _canAttack = true;
     private float _attackDelay = 1;
 
@@ -16,7 +18,9 @@ public class ZombieAttack : NetworkBehaviour
     {
         if(collision.TryGetComponent<Player>(out var player) && _canAttack)
         {
-            player.Health.CurrentHealth--;
+            if(_enemy.States.CurrentState is not DeadState)
+                player.Health.CurrentHealth--;
+
             StartCoroutine(AttackResetTimer());
         }
     }

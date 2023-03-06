@@ -39,7 +39,6 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void SetHearts(int count)
     {
-        Debug.Log(count);
         for(int i = 0; i < count; i++)
         {
             _hearts.Add(Instantiate(_heartPrefab, transform));

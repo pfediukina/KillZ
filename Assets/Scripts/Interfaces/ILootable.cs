@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface ILootable
 {
-    public BonusType Bonus { get; }
+    public LootType Bonus { get; }
     public float Value { get; }
 
     public void PickUp(Player player);

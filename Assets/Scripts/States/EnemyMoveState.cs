@@ -29,10 +29,31 @@ public class EnemyMoveState : IState
 
     public void Update()
     {
+        FollowNearestPlayer();
         if (Follow != null)
         {
             Vector2 vel = (Follow.position - _unit.transform.position).normalized * _unit.Info.StartSpeed * _unit.Runner.DeltaTime;
             _rb.velocity = vel;
         }
+    }
+
+    public void FollowNearestPlayer()
+    {
+        if (_unit.States.CurrentState is DeadState) return;
+        if (Launcher.Chars.Count == 0) return;
+
+        var state = _unit.States.GetState<EnemyMoveState>();
+        if (state == null) return;
+
+        Transform nearest = Launcher.Chars[0];
+        foreach (var transf in Launcher.Chars)
+        {
+            if (transf.GetComponent<Unit>().States.CurrentState is DeadState) continue;
+            if (Vector3.Distance(nearest.position, _unit.transform.position) > Vector3.Distance(transf.position, _unit.transform.position))
+            {
+                nearest = transf;
+            }
+        }
+        state.Follow = nearest;
     }
 }

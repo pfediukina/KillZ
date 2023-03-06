@@ -4,50 +4,35 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(NetworkTransform))]
 public class LootItem : NetworkBehaviour, ILootable
 {
-    public BonusType Bonus => _bonus;
+    public LootType Bonus => _bonus;
     public float Value => _value;
 
-    [SerializeField] private BonusType _bonus;
+    [SerializeField] private LootType _bonus;
     [SerializeField] private float _value;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            PickUp(collision.gameObject.GetComponent<Player>());
+            RPC_PickUp(collision.gameObject.GetComponent<Player>());
+            Runner.Despawn(Object);
         }
     }
+    [Rpc]
+    public virtual void RPC_PickUp(Player player) { }
 
     public void PickUp(Player player)
     {
-        switch (Bonus)
-        {
-            case BonusType.Heal:
-                PickUpHeal(player);
-                break;
-            case BonusType.Ammo:
-                PickUpAmmo(player);
-                break;
-        }
-        Runner.Despawn(Object);
-    }
-
-    private void PickUpHeal(Player player)
-    {
-        player.Health.CurrentHealth += (int)Value;
-    }
-
-    private void PickUpAmmo(Player player)
-    {
-        player.CurrentWeapon.Ammo += (int)Value;
+        //throw new System.NotImplementedException();
     }
 }
 
-public enum BonusType
+public enum LootType
 {
+    Ammo,
     Heal,
-    //AttackSpeed,
-    Ammo
+    Bomb,
 }

@@ -2,13 +2,18 @@ using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class GameMaster : NetworkBehaviour
 {
-    [SerializeField] private Zombie _testEnemy;
     [SerializeField] private ZombieFactory _zombieFactory;
+    [SerializeField] private LootFactory _lootFactory;
+
+    [SerializeField] private GameInfo _info;
+    public GameInfo Info => _info;
+
 
     public static Action<int> OnTimeChanged;
 
@@ -32,20 +37,19 @@ public class GameMaster : NetworkBehaviour
 
     private IEnumerator GameTimer()
     {
-        while(EnableTimer)
-        { 
+        while (EnableTimer)
+        {
             yield return new WaitForSecondsRealtime(1);
-            TimeTestEvent();
+            //TimeTestEvent();
             CurrentTime++;
-        }
-    }
 
-    //wip
-    private void TimeTestEvent()
-    {
-        if (CurrentTime == 5)
-            _zombieFactory.StartSpawn();
-        else if (CurrentTime == 40)
-            _zombieFactory.EndSpawn();
+            if(CurrentTime % Info.LootTimer == 0)
+            {
+                _lootFactory.CreateLoot(LootType.Heal);
+                _lootFactory.CreateLoot(LootType.Ammo);
+                _lootFactory.CreateLoot(LootType.Bomb);
+                _zombieFactory.SpawnObjects(3, Vector3.zero);
+            }
+        }
     }
 }

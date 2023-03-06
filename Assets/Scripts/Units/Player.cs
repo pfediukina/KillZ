@@ -23,7 +23,6 @@ public class Player : Unit
             else
             {
                 _weapon = WeaponPlace.GetComponentInChildren<BaseWeapon>();
-                _weapon.Reload = Info.AttackDelay;
             }
             return _weapon;
         }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3202310102489286134}
   - component: {fileID: 3810602107213723706}
   m_Layer: 8
-  m_Name: testCollider
+  m_Name: AttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,6 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+  _enemy: {fileID: 8414542014594305967}
 --- !u!1 &3848227093265116870
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,7 +91,7 @@ GameObject:
   - component: {fileID: 3676333342179837521}
   - component: {fileID: 4814642583765456826}
   - component: {fileID: 2972420885547817101}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Zombie1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

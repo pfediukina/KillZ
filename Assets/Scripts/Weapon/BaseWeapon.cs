@@ -8,12 +8,16 @@ public class BaseWeapon : NetworkBehaviour
 {
     [SerializeField] private SpriteRenderer _sprite;
     [SerializeField] private Bullet _bulletPref;
-    [SerializeField] private int _maxAmmo;
+    [SerializeField] private Transform _bulletSpawn;
+
+    [SerializeField] protected WeaponInfo _info;
+
+    [HideInInspector][Networked(OnChanged = nameof(OnOwnerChange))] public NetworkId ID { get; set; }
+    [HideInInspector] public bool _canShoot = true;
 
     public Action<int, int> OnAmmoChanged;
-    
-    public float Reload;
 
+    public SpriteRenderer GetSprite() => _sprite;
     public int Ammo { get => _ammo; 
         set
         {
@@ -21,22 +25,20 @@ public class BaseWeapon : NetworkBehaviour
             AmmoChanged();
         }
     }
+
     private int _ammo;
+    private Unit _unit;
 
-    [Networked(OnChanged = nameof(OnOwnerChange))] public NetworkId ID { get; set; }
-
-    public SpriteRenderer GetSprite() => _sprite;
-    public bool _canShoot = true;
 
     private void Start()
     {
-        Ammo = _maxAmmo;
+        Ammo = _info.MaxAmmo;
     }
 
     public void AmmoChanged()
     {
-        _ammo = Mathf.Clamp(_ammo, 0, _maxAmmo);
-        OnAmmoChanged?.Invoke(_ammo, _maxAmmo);
+        _ammo = Mathf.Clamp(_ammo, 0, _info.MaxAmmo);
+        OnAmmoChanged?.Invoke(_ammo, _info.MaxAmmo);
     }
 
     public static void OnOwnerChange(Changed<BaseWeapon> changed)
@@ -47,8 +49,12 @@ public class BaseWeapon : NetworkBehaviour
         player.GetComponent<NetworkAnimator>().WeaponSprite = changed.Behaviour.GetSprite();
 
         if(player.HasInputAuthority)
+        {
             changed.Behaviour.OnAmmoChanged += player.UI.ChangePlayerAmmo;
-        changed.Behaviour.OnAmmoChanged?.Invoke(changed.Behaviour.Ammo, changed.Behaviour._maxAmmo);
+            changed.Behaviour._unit = player;
+        }
+        changed.Behaviour.OnAmmoChanged?.Invoke(changed.Behaviour.Ammo, changed.Behaviour._info.MaxAmmo);
+
     }
 
     public virtual void Shoot(Vector2 mousePos)
@@ -67,23 +73,29 @@ public class BaseWeapon : NetworkBehaviour
     {
         if(HasStateAuthority)
         {
-            var shot = Runner.Spawn(_bulletPref, transform.position);
-            shot.MoveTo(dir);
-            shot.Owner = Runner.FindObject(ID).GetComponent<Player>();
+            var shot = Runner.Spawn(_bulletPref, _bulletSpawn.position);
+            shot.InitBullet(_unit, _info.Damage, dir);
+            //shot.MoveTo(dir);
+            //shot.Owner = Runner.FindObject(ID).GetComponent<Player>();
         }
     }
 
     private Vector3 GetShootDirection(Vector2 mousePos)
     {
-        var v = Camera.main.ScreenToWorldPoint(mousePos);
-        v.z = transform.position.z;
-        return v;
+        var mouse = Camera.main.ScreenToWorldPoint(mousePos);
+        var result = mouse - _bulletSpawn.position;
+
+        result.z = 0;
+        result.Normalize();
+        result *= _info.AttackDistance;
+        result.z = _bulletSpawn.position.z; 
+        return result;
     }
 
     private IEnumerator FireReload()
     {
         _canShoot = false;
-        yield return new WaitForSeconds(Reload);
+        yield return new WaitForSeconds(_info.AttackRate);
         _canShoot = true;
     }
 }
