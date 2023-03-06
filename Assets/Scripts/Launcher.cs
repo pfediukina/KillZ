@@ -12,18 +12,19 @@ using WebSocketSharp;
 public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    [SerializeField] private GameMaster _GM;
+    [SerializeField] private GameManager _GM;
     [SerializeField] private WeaponSpawner _weapon;
 
     //[SerializeField] private PlayerUI _ui;
 
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    private static Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     public static List<Transform> Chars = new List<Transform>();
 
-    private NetworkRunner _runner;
+    private static NetworkRunner _runner;
 
     private void Awake()
     {
+        LoadingScreen.EnableLoading(true);
         _runner = GetComponent<NetworkRunner>();
         _spawnedCharacters.Clear();
         Chars.Clear();
@@ -31,7 +32,6 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 
     public void Start()
     {
-        LoadingScreen.EnableLoading(true);
 
         if (SessionInfo.isConnect)
         {
@@ -55,6 +55,15 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
         }) ;
         LoadingScreen.EnableLoading(false);
         _GM.StartGame();
+    }
+
+    public static void DisconnectAll()
+    {
+        foreach (var Char  in Chars)
+        {
+            Char.GetComponent<Player>().OnDisconnect();
+        }
+        _runner.Shutdown();
     }
 
     public async void JoinGame(string session)
@@ -102,12 +111,15 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
+    { 
+
+    }
+
     #region UNUSED
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
-
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
 
     public void OnConnectedToServer(NetworkRunner runner) { }
 

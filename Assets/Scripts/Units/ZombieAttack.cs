@@ -9,10 +9,21 @@ using UnityEngine;
 
 public class ZombieAttack : NetworkBehaviour
 {
-    private bool _canAttack = true;
-    private float _attackDelay = 1;
+    [SerializeField] protected Zombie _zombie;
+    protected bool _canAttack = true;
+    protected float _attackDelay = 1;
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnEnable()
+    {
+        _canAttack = true;
+    }
+
+    protected virtual void Update()
+    {
+        if (_zombie.States.CurrentState is DeadState && _canAttack) _canAttack = false;
+    }
+
+    protected virtual void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.TryGetComponent<Player>(out var player) && _canAttack)
         {
@@ -21,7 +32,7 @@ public class ZombieAttack : NetworkBehaviour
         }
     }
 
-    private IEnumerator AttackResetTimer()
+    protected IEnumerator AttackResetTimer()
     {
         _canAttack = false;
         yield return new WaitForSeconds(_attackDelay);

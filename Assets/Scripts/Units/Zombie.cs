@@ -11,49 +11,43 @@ public class Zombie : Unit, ISpawnObject
     [SerializeField] private Animator _anim;
     [SerializeField] private NetworkRigidbody2D _networkRB;
     [SerializeField] private GameObject _sprite;
+    [SerializeField] private int _score = 1;
 
+    public int Score => _score;
     private BaseFactory<Zombie> _ownedFactory;
+    private HashSet<Bullet> _bullets = new HashSet<Bullet>();
 
     protected override void Awake()
     {
         base.Awake();
         States.AddState(new EnemyMoveState(this));
-    }
-    private void FixedUpdate()
-    {
-        FollowNearestPlayer();
+        States.AddState(new HitState(this));
+        tag = "Zombie";
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnEnable()
     {
-        if(collision.tag == "Bullet")
+        _bullets.Clear();
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<Bullet>(out var bullet))
         {
-            var bullet = collision.GetComponent<Bullet>();
+            if (_bullets.Contains(bullet)) return;
+            else if (States.CurrentState is DeadState) return;
+            else if(bullet.Owner is Zombie) return;
+            else if(Vector3.Distance(collision.transform.position, transform.position) > 0.5f) return;
+            _bullets.Add(bullet);
+
             Health.CurrentHealth--;
+
+            if(Health.CurrentHealth <= 0)
+                (bullet.Owner as Player).Score += _score;
+
             Runner.Despawn(bullet.Object);
+            States.SetState<HitState>();
         }
-    }
-
-    public void FollowNearestPlayer()
-    {
-        if (States.CurrentState is DeadState) return;
-        if (Launcher.Chars.Count == 0) return;
-
-        var state = States.GetState<EnemyMoveState>();
-        if (state == null) return;
-
-        Transform nearest = Launcher.Chars[0];
-        foreach (var transf in Launcher.Chars)
-        {
-            if (transf.GetComponent<Unit>().States.CurrentState is DeadState) continue;
-            if (Vector3.Distance(nearest.position, transform.position) > Vector3.Distance(transf.position, transform.position))
-            {
-                nearest = transf;
-            }
-        }
-        state.Follow = nearest;
-        if(States.CurrentState is not EnemyMoveState)
-            States.SetState<EnemyMoveState>();
     }
 
     public void DespawnObject()
@@ -62,11 +56,23 @@ public class Zombie : Unit, ISpawnObject
         {
             States.SetState<DeadState>();
         }
+
         if(gameObject.activeSelf)
             StartCoroutine(FactoryDespawnDelay(3));
     }
 
-    public IEnumerator FactoryDespawnDelay(float time)
+    public void SpawnObject(NetworkBehaviour factory, Vector3 pos)
+    {
+        _ownedFactory = (BaseFactory<Zombie>)factory;
+
+        _networkRB.TeleportToPosition(pos);
+        Health.ResetHealth();
+        States.SetState<EnemyMoveState>();
+        StartCoroutine(SpawnSprite());
+        
+    }
+
+    private IEnumerator FactoryDespawnDelay(float time)
     {
         yield return new WaitForSeconds(time);
         if (_ownedFactory != null)
@@ -76,16 +82,7 @@ public class Zombie : Unit, ISpawnObject
         }
     }
 
-    public void SpawnObject(NetworkBehaviour factory, Vector3 pos)
-    {
-        _networkRB.TeleportToPosition(pos);
-        States.SetState<EnemyMoveState>();
-        Health.ResetHealth();
-        _ownedFactory = (BaseFactory<Zombie>)factory;
-        StartCoroutine(SpawnSprite());
-        
-    }
-    public IEnumerator SpawnSprite()
+    private IEnumerator SpawnSprite()
     {
         yield return new WaitForSeconds(0.2f);
         _sprite.SetActive(true);

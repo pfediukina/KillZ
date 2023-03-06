@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Unit))]
 public class NetworkHealth : NetworkBehaviour
 {
-    [SerializeField] private int _maxHealth;
+    private int _maxHealth;
     private Unit _owner;
 
     [Networked(OnChanged = nameof(HealthChanged))] public int CurrentHealth { get; set; }

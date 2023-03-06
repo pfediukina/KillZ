@@ -14,6 +14,7 @@ public class ZombieFactory : BaseFactory<Zombie>
     [SerializeField] private int _startAmount = 3;
     [SerializeField] private float _radius = 10;
     [SerializeField] private float _angleOffset = 10;
+
     private float _currentAngle;
 
     private void Awake()

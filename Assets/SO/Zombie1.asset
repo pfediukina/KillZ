@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Zombie1
   m_EditorClassIdentifier: 
   StartSpeed: 80
-  AttackDelay: 0.2
-  MaxHealth: 1
+  AttackDelay: 0.3
+  MaxHealth: 2

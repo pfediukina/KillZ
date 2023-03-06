@@ -20,31 +20,31 @@ public class NetworkAnimator : NetworkBehaviour
         {
             Vector2 weaponPos = Camera.main.WorldToScreenPoint(weapon.transform.position);
             WeaponZRotation = Mathf.Atan2(mousePos.y - weaponPos.y, mousePos.x - weaponPos.x) * Mathf.Rad2Deg + (WeaponSprite.flipX ? 180 : 0);
-            RPC_RotateWeapon(WeaponZRotation);
+            RPCList.RPC_RotateWeapon(WeaponSprite, WeaponZRotation);
         }
         else
             RotateWeapon(WeaponZRotation);
     }
 
-    [Rpc]
-    public void RPC_ChangeAnimationID(int id)
-    {
-        _animator.CrossFade(id, 0);
-    }
+    //[Rpc]
+    //public void RPC_ChangeAnimationID(int id)
+    //{
+    //    _animator.CrossFade(id, 0);
+    //}
 
-    [Rpc]
-    public void RPC_Flip(bool flip)
-    {
-        _sprite.flipX = flip;
-        if(WeaponSprite != null)
-            WeaponSprite.flipX = flip;
-    }
+    //[Rpc]
+    //public void RPC_Flip(bool flip)
+    //{
+    //    _sprite.flipX = flip;
+    //    if(WeaponSprite != null)
+    //        WeaponSprite.flipX = flip;
+    //}
 
-    [Rpc]
-    public void RPC_RotateWeapon(float rot)
-    {
-        RotateWeapon(rot);
-    }
+    //[Rpc]
+    //public void RPC_RotateWeapon(float rot)
+    //{
+    //    RotateWeapon(rot);
+    //}
 
     private void RotateWeapon(float rot)
     {

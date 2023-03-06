@@ -133,9 +133,8 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _sprite: {fileID: 6561487306160793167}
   _bulletPref: {fileID: 9145170557020845749, guid: 1f1868721dfbc924a92075ed86bb8e46, type: 3}
+  _attackDelay: 1
   _maxAmmo: 10
-  Reload: 0
-  _Ammo: 10
   _ID:
     Raw: 0
   _canShoot: 1

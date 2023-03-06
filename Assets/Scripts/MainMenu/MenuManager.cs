@@ -7,7 +7,7 @@ using WebSocketSharp;
 
 public class MenuManager : MonoBehaviour
 {
-    [SerializeField] private MenuUI _ui;
+    [SerializeField] private MainMenuUI _ui;
     [SerializeField] private int _gameSceneID;
 
     public void OnButtonPressed(bool isConnect)
@@ -22,5 +22,10 @@ public class MenuManager : MonoBehaviour
         SessionInfo.SessionName = sessionName;
         SessionInfo.isConnect = connect;
         SceneManager.LoadScene(_gameSceneID);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

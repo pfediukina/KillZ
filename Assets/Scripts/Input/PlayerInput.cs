@@ -3,13 +3,13 @@ using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
 
 public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 {
     public Action OnBackPressed;
     public Action<Vector2> OnAttackPressed;
     public Action<Vector2> OnViewChanged;
+    public Action<Vector2> OnMoved;
 
     private IPlayerInput _keys;
     //private IPlayerInput _screen; 
@@ -48,6 +48,8 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 
             if(_actions.Keyboard.Attack.IsPressed())
                 OnAttackPressed?.Invoke(_actions.Keyboard.MousePos.ReadValue<Vector2>());
+
+            OnMoved?.Invoke(_actions.Keyboard.Movement.ReadValue<Vector2>());
         }
     }
 

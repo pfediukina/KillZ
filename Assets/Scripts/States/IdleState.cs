@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class IdleState : IState
-{    private NetworkAnimator _animator;
+{    private Animator _animator;
     private Unit _unit;
     private int _animationID = Animator.StringToHash("Idle");
 
     public IdleState(Unit unit) 
     { 
-        _animator = unit.GetComponent<NetworkAnimator>();
+        _animator = unit.GetComponentInChildren<Animator>();
         _unit = unit;
     }
 
@@ -20,7 +20,7 @@ public class IdleState : IState
     {
         if (_unit.Runner != null)
         {
-            _animator.RPC_ChangeAnimationID(_animationID);
+            RPCList.RPC_ChangeAnimationID(_animator, _animationID);
         }
     }
 

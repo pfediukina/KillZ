@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4866261542809788572}
   - component: {fileID: -4722045467121017890}
   m_Layer: 0
-  m_Name: Loot
+  m_Name: Ammo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _bonus: 1
+  _bonus: 2
   _value: 10
 --- !u!114 &4866261542809788572
 MonoBehaviour:

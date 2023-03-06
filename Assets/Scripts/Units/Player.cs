@@ -4,11 +4,14 @@ using JetBrains.Annotations;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //[RequireComponent(typeof(PlayerInput))]
 
 public class Player : Unit
 {
+    [Networked(OnChanged = nameof(OnScoreChanged))] public int Score { get; set; }
+
     [SerializeField] private CinemachineVirtualCamera _camera;
     [SerializeField] private NetworkAnimator _anim;
 
@@ -23,7 +26,6 @@ public class Player : Unit
             else
             {
                 _weapon = WeaponPlace.GetComponentInChildren<BaseWeapon>();
-                _weapon.Reload = Info.AttackDelay;
             }
             return _weapon;
         }
@@ -33,24 +35,7 @@ public class Player : Unit
             _weapon.transform.parent = WeaponPlace;
         }
     }
-
-    public BaseWeapon CurrentWeapon => _weapon;
     private BaseWeapon _weapon;
-
-    public PlayerInput Input
-    {
-        get
-        {
-            if (_input != null)
-                return _input;
-            else
-                _input = GetComponent<PlayerInput>();
-            return _input;
-
-        }
-    }
-    private PlayerInput _input;
-
     public PlayerUI UI
     {
         get
@@ -65,57 +50,86 @@ public class Player : Unit
     }
     private PlayerUI _ui;
 
-    public Action OnPlayerPressedMenu;
+    public PlayerInput Input { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
+        GetComponents();
+
         States.AddState(new MoveState(this));
-
-        Input.OnAttackPressed += ctx =>
-        {
-            if (Weapon != null && States.CurrentState is not DeadState)
-            {
-                Weapon.Shoot(ctx);
-            }
-        };
-
-        Input.OnBackPressed += PressedMenu;
-        Input.OnViewChanged += ctx => { if (Weapon != null) _anim.CalculateAndRotateWeapon(ctx, Weapon.GetSprite()); };
-        Input.OnViewChanged += UI.FollowPoint;
     }
 
     private void Start()
     {
+
+        BindEvents();
+        UI.UpdateScore(Score);
+
         if (HasInputAuthority)
         {
             _camera.Priority = 10;
+            Score = 0;
         }
+    }
+
+    public void OnDisconnect()
+    {
+        Runner.Shutdown();
+        SceneManager.LoadScene(0);
+    }
+
+    private static void OnScoreChanged(Changed<Player> changed)
+    {
+        Debug.Log("Here");
+        changed.Behaviour.UI.UpdateScore(changed.Behaviour.Score);
+    }
+    
+    private void GetPlayerInput(Vector2 direction)
+    {
+        if (States.CurrentState is DeadState) return;
+        States.GetState<MoveState>().Direction = direction;
+        if (direction != Vector2.zero && States.CurrentState is not MoveState)
+        {
+            States.SetState<MoveState>();
+        }
+        else if (direction == Vector2.zero && States.CurrentState is not IdleState)
+        {
+            States.SetState<IdleState>();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<Bullet>(out var bullet))
+        {
+            if (States.CurrentState is DeadState) return;
+            if (bullet.Owner is Player) return;
+            Runner.Despawn(bullet.Object);
+            Health.CurrentHealth--;
+        }
+    }
+
+    private void GetComponents()
+    {
+        Input = GetComponent<PlayerInput>();
+    }
+
+    private void BindEvents()
+    {
+        Input.OnAttackPressed += ctx =>
+        {
+            if (Weapon != null)
+            {
+                Weapon.Shoot(ctx);
+            }
+        };
+        Input.OnViewChanged += ctx => { if (Weapon != null) _anim.CalculateAndRotateWeapon(ctx, Weapon.GetSprite()); };
+        Input.OnViewChanged += UI.FollowPoint;
+        Input.OnMoved += GetPlayerInput;
+        Input.OnBackPressed += () =>  UI.MenuUI.EnableMenu(!UI.MenuUI.IsOpened);
 
         Health.OnHealthChanged += UI.HealthUI.UpdateHealth;
-    }
-
-    private void PressedMenu()
-    {
-        if (HasInputAuthority)
-        {
-            UI.SwitchPlayerMenu();
-        }
-    }
-
-    public override void FixedUpdateNetwork()
-    {
-        if (Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data) &&
-            States.CurrentState is not DeadState)
-        {
-            if (data.Direction != Vector2.zero && States.CurrentState is not MoveState)
-            {
-                States.SetState<MoveState>();
-            }
-            else if (data.Direction == Vector2.zero && States.CurrentState is not IdleState)
-            {
-                States.SetState<IdleState>();
-            }
-        }
+        UI.MenuUI.OnDisconnect += OnDisconnect;
     }
 }

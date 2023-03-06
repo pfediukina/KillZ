@@ -14,7 +14,6 @@ public class StateMachine : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-
         if (CurrentState != null)
         {
             //CurrentState.Data = data;

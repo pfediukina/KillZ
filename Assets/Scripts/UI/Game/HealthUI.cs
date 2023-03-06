@@ -3,23 +3,19 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerHealthUI : MonoBehaviour
+public class HealthUI : MonoBehaviour
 {
     [SerializeField] private GameObject _heartPrefab;
+    [SerializeField] private Transform _parent;
 
     private List<GameObject> _hearts = new List<GameObject>();
 
     private int _health;
     private int _healthMax;
 
-    public void UpdateHealth(int health)
-    {
-        _health = health;
-    }
-
     public void UpdateHealth(int health, int maxHealth)
     {
-        if(transform.childCount == 0)
+        if(_parent.childCount == 0)
             SetHearts(maxHealth);
 
         _health = health;
@@ -42,7 +38,7 @@ public class PlayerHealthUI : MonoBehaviour
         Debug.Log(count);
         for(int i = 0; i < count; i++)
         {
-            _hearts.Add(Instantiate(_heartPrefab, transform));
+            _hearts.Add(Instantiate(_heartPrefab, _parent));
         }
     }
 }

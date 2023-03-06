@@ -8,12 +8,10 @@ public class BaseWeapon : NetworkBehaviour
 {
     [SerializeField] private SpriteRenderer _sprite;
     [SerializeField] private Bullet _bulletPref;
+    [SerializeField] private float _attackDelay;
     [SerializeField] private int _maxAmmo;
 
     public Action<int, int> OnAmmoChanged;
-    
-    public float Reload;
-
     public int Ammo { get => _ammo; 
         set
         {
@@ -23,10 +21,10 @@ public class BaseWeapon : NetworkBehaviour
     }
     private int _ammo;
 
-    [Networked(OnChanged = nameof(OnOwnerChange))] public NetworkId ID { get; set; }
+    [HideInInspector][Networked(OnChanged = nameof(OnOwnerChange))] public NetworkId ID { get; set; }
+    [HideInInspector] public bool _canShoot = true;
 
     public SpriteRenderer GetSprite() => _sprite;
-    public bool _canShoot = true;
 
     private void Start()
     {
@@ -56,20 +54,9 @@ public class BaseWeapon : NetworkBehaviour
         if(_canShoot && Ammo > 0)
         {
             var v = GetShootDirection(mousePos);
-            RPC_Fire(v);
+            RPCList.RPC_Fire(Runner.FindObject(ID).GetComponent<Player>(), v, _bulletPref, 4f);
             Ammo--;
             StartCoroutine(FireReload());
-        }
-    }
-
-    [Rpc]
-    private void RPC_Fire(Vector3 dir)
-    {
-        if(HasStateAuthority)
-        {
-            var shot = Runner.Spawn(_bulletPref, transform.position);
-            shot.MoveTo(dir);
-            shot.Owner = Runner.FindObject(ID).GetComponent<Player>();
         }
     }
 
@@ -83,7 +70,7 @@ public class BaseWeapon : NetworkBehaviour
     private IEnumerator FireReload()
     {
         _canShoot = false;
-        yield return new WaitForSeconds(Reload);
+        yield return new WaitForSeconds(_attackDelay);
         _canShoot = true;
     }
 }

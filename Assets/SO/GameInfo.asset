@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 815a38b25aa44c44083cca9365df3dc9, type: 3}
+  m_Name: GameInfo
+  m_EditorClassIdentifier: 
+  RequiredPlayers: 2
+  BreakTime: 5
+  Waves: 3
+  WaveTime:
+  - 60
+  - 180
+  - 300
+  LootTimer: 5
+  LootItems:
+  - {fileID: 6255152552811687869, guid: 8793a23b104cfbc4f94176d0e91000a7, type: 3}
+  - {fileID: 6255152552811687869, guid: b3b7fa5a9cf589642a33a0730b9be6c1, type: 3}
+  - {fileID: 6255152552811687869, guid: 373d36d71d14430408f8d5f116076fc1, type: 3}
