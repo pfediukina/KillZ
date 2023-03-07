@@ -2,22 +2,19 @@
 using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using WebSocketSharp;
 
 //TEMP
 public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public static Launcher Instance { get; private set; }
+
     [HideInInspector] public static int SelectedSkin;
 
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private GameMaster _GM;
     [SerializeField] private WeaponSpawner _weapon;
-
-    //[SerializeField] private PlayerUI _ui;
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     public static List<Transform> Chars = new List<Transform>();
@@ -29,6 +26,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
         _runner = GetComponent<NetworkRunner>();
         _spawnedCharacters.Clear();
         Chars.Clear();
+        Instance = this;
     }
 
     public void Start()
@@ -56,7 +54,7 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         }) ;
         LoadingScreen.EnableLoading(false);
-        _GM.StartGame();
+        //_GM.StartGame();
     }
 
     public async void JoinGame(string session)
@@ -70,6 +68,17 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
         LoadingScreen.EnableLoading(false);
+    }
+
+    public static void DisconnectAllServer()
+    {
+        foreach (var item in Chars)
+        {
+            if(item.TryGetComponent<Player>(out var data))
+            {
+                Instance.RPC_DisconnectPlayer(data);
+            }
+        }
     }
 
     public void LeaveServer()
@@ -102,6 +111,18 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Remove(player);
             Chars.Remove(networkObject.transform);
         }
+        DisconnectAllServer();
+    }
+
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
+    {
+        DisconnectAllServer();
+    }
+
+    [Rpc]
+    private void RPC_DisconnectPlayer(Player p)
+    {
+        p.OnDisconnect();
     }
 
     #region UNUSED
@@ -109,7 +130,6 @@ public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
 
     public void OnConnectedToServer(NetworkRunner runner) { }
 

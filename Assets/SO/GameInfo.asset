@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 815a38b25aa44c44083cca9365df3dc9, type: 3}
   m_Name: GameInfo
   m_EditorClassIdentifier: 
+  WavesCount: 3
+  WaveTimers: 0f0000000f0000000f000000
+  BreakTime: 5
+  RequiredPlayers: 1
   LootTimer: 5
-  LootItems: 3
+  LootItems: []

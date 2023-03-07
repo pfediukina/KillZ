@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //[RequireComponent(typeof(PlayerInput))]
 
@@ -19,30 +20,6 @@ public class Player : Unit
         if(changed.Behaviour.HasInputAuthority) 
             changed.Behaviour.UI.UpdateScore(changed.Behaviour.Score);
     }
-
-    public Transform WeaponPlace;
-
-    public BaseWeapon Weapon
-    {
-        get
-        {
-            if (_weapon != null)
-                return _weapon;
-            else
-            {
-                _weapon = WeaponPlace.GetComponentInChildren<BaseWeapon>();
-            }
-            return _weapon;
-        }
-        set
-        {
-            _weapon = value;
-            _weapon.transform.parent = WeaponPlace;
-        }
-    }
-
-    public BaseWeapon CurrentWeapon => _weapon;
-    private BaseWeapon _weapon;
 
     public PlayerInput Input
     {
@@ -99,7 +76,18 @@ public class Player : Unit
             _camera.Priority = 10;
         }
         Score = 0;
+
         Health.OnHealthChanged += UI.HealthUI.UpdateHealth;
+        UI.OnDisconnect = OnDisconnect;
+        Health.ResetHealth();
+        UI.ShowStartGameButton(this);
+    }
+
+
+    public void OnDisconnect()
+    {
+        Runner.Shutdown();
+        SceneManager.LoadScene(0);
     }
 
 
@@ -126,4 +114,9 @@ public class Player : Unit
         }
     }
 
+
+    public override void TakeDamage(Unit from, int damage)
+    {
+        Health.CurrentHealth -= damage;
+    }
 }

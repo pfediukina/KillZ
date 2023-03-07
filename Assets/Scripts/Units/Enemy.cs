@@ -19,11 +19,13 @@ public class Enemy : Unit, ISpawnObject
         base.Awake();
         tag = "Enemy";
         States.AddState(new EnemyMoveState(this));
+        States.AddState(new HitState(this));
     }
 
     public override void TakeDamage(Unit from, int damage)
     {
         if (IsDead) return;
+        States.SetState<HitState>();
         Health.CurrentHealth -= damage;
         if (from is Player && Health.CurrentHealth <= 0)
             (from as Player).Score += Info.Score;

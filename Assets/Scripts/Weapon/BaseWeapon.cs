@@ -3,6 +3,7 @@ using Fusion;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BaseWeapon : NetworkBehaviour
 {
@@ -52,18 +53,30 @@ public class BaseWeapon : NetworkBehaviour
         if(player.HasInputAuthority)
         {
             changed.Behaviour.OnAmmoChanged += player.UI.ChangePlayerAmmo;
+            changed.Behaviour._unit = player;
         }
         changed.Behaviour.OnAmmoChanged?.Invoke(changed.Behaviour.Ammo, changed.Behaviour._info.MaxAmmo);
-
     }
 
     public virtual void Shoot(Vector2 mousePos)
     {
         if(_canShoot && Ammo > 0)
         {
-            var v = GetShootDirection(mousePos);
+            var mouse = Camera.main.ScreenToWorldPoint(mousePos);
+            var v = GetShootDirection(mouse);
             RPC_Fire(v);
-            Ammo--;
+            if(_info.HasAmmo) Ammo--;
+            StartCoroutine(FireReload());
+        }
+    }
+
+    public virtual void Shoot(Transform transf)
+    {
+        if (_canShoot && Ammo > 0)
+        {
+            Vector3 pos = GetShootDirection(transf.position);
+            RPC_Fire(pos);
+            if (_info.HasAmmo) Ammo--;
             StartCoroutine(FireReload());
         }
     }
@@ -80,11 +93,9 @@ public class BaseWeapon : NetworkBehaviour
         }
     }
 
-    private Vector3 GetShootDirection(Vector2 mousePos)
+    private Vector3 GetShootDirection(Vector3 pos)
     {
-        var mouse = Camera.main.ScreenToWorldPoint(mousePos);
-        var result = mouse - _bulletSpawn.position;
-
+        var result = pos - _bulletSpawn.position;
         result.z = 0;
         result.Normalize();
         result *= _info.AttackDistance;

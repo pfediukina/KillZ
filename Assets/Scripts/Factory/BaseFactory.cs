@@ -67,7 +67,8 @@ public class BaseFactory<T> : NetworkBehaviour where T : NetworkBehaviour, ISpaw
 
     public void StopSpawnTimer()
     {
-        StopCoroutine(_spawnTimer);
+        if(_spawnTimer != null )
+            StopCoroutine(_spawnTimer);
     }
 
     private IEnumerator SpawnObjectTimer(float time)

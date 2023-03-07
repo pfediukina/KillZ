@@ -2,7 +2,6 @@ using Fusion;
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Unit))]
 public class NetworkHealth : NetworkBehaviour
 {
     [SerializeField] private int _maxHealth;

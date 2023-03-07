@@ -16,5 +16,5 @@ MonoBehaviour:
   AttackRate: 0.3
   Damage: 1
   MaxAmmo: 15
-  IsExplosive: 0
+  HasAmmo: 1
   EnemyTag: Enemy

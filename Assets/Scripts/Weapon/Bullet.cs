@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class Bullet : NetworkBehaviour, IDamaging
 {
-    [SerializeField] private float _speed = 4f;
+    [SerializeField] private float _speed;
     [HideInInspector] public bool StartMove = false;
     
     private Vector3 _dir;
@@ -33,7 +33,7 @@ public class Bullet : NetworkBehaviour, IDamaging
     private void Update()
     {
         if (StartMove)
-            transform.position += _dir * Runner.DeltaTime;
+            transform.position += _dir * Runner.DeltaTime * _speed;
         if(Vector3.Distance(transform.position, _dir) <= 0)
         {
             Runner.Despawn(Object);

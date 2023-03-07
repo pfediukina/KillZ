@@ -28,7 +28,7 @@ public class DeadState : IState
         }
         else if(_unit is Player)
         {
-            (_unit as Player).CurrentWeapon.gameObject.SetActive(false);
+            (_unit as Player).Weapon.gameObject.SetActive(false);
         }
     }
 

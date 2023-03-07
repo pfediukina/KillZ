@@ -21,6 +21,7 @@ public class LootItem : NetworkBehaviour, ILootable
             Runner.Despawn(Object);
         }
     }
+
     [Rpc]
     public virtual void RPC_PickUp(Player player) { }
 

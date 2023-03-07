@@ -21,6 +21,28 @@ public abstract class Unit : NetworkBehaviour, ITakeDamage
     }
     private NetworkHealth _health;
 
+    public Transform WeaponPlace;
+
+    public BaseWeapon Weapon
+    {
+        get
+        {
+            if (_weapon != null)
+                return _weapon;
+            else
+            {
+                _weapon = WeaponPlace.GetComponentInChildren<BaseWeapon>();
+            }
+            return _weapon;
+        }
+        set
+        {
+            _weapon = value;
+            _weapon.transform.parent = WeaponPlace;
+        }
+    }
+    private BaseWeapon _weapon;
+
     public bool IsDead => States.CurrentState is DeadState ? true : false;
     public StateMachine States { get; private set; }
     public virtual UnitInfo Info => _info;

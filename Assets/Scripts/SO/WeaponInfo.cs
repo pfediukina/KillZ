@@ -8,6 +8,7 @@ public class WeaponInfo : ScriptableObject
     public float AttackRate;
     public int Damage;
     public int MaxAmmo;
-    public bool IsExplosive;
+    public bool HasAmmo;
+    //public bool IsExplosive;
     public string EnemyTag;
 }
