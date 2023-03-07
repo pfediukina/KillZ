@@ -7,7 +7,9 @@ public class NetworkAnimator : NetworkBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _sprite;
+    [SerializeField] private SkinData _skinData;
 
+    [Networked(OnChanged = nameof(OnSkinChanged))] public int Skin { get; set; }
     [Networked] public float WeaponZRotation { get; set; }
 
     public SpriteRenderer WeaponSprite;
@@ -46,6 +48,13 @@ public class NetworkAnimator : NetworkBehaviour
         RotateWeapon(rot);
     }
 
+    [Rpc]
+    public void RPC_SetSkin(int index)
+    {
+        Skin = index;
+        SetSkin(index);
+    }
+
     private void RotateWeapon(float rot)
     {
         if (WeaponSprite == null) return;
@@ -54,4 +63,24 @@ public class NetworkAnimator : NetworkBehaviour
         else WeaponSprite.flipY = false;
     }
 
+    private static void OnSkinChanged(Changed<NetworkAnimator> changed)
+    {
+        changed.Behaviour.SetSkin(changed.Behaviour.Skin);
+    }
+
+    private void SetSkin(int index)
+    {
+        Debug.Log(index);
+        if (_skinData == null || index > _skinData.skinControllers.Length) return;
+
+        _animator.runtimeAnimatorController = _skinData.skinControllers[index];
+    }
+
+    private void Start()
+    {
+        if (HasInputAuthority)
+            RPC_SetSkin(Launcher.SelectedSkin);
+        else
+            SetSkin(Skin);
+    }
 }

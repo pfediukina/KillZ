@@ -11,6 +11,8 @@ using WebSocketSharp;
 //TEMP
 public class Launcher : MonoBehaviour, INetworkRunnerCallbacks
 {
+    [HideInInspector] public static int SelectedSkin;
+
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private GameMaster _GM;
     [SerializeField] private WeaponSpawner _weapon;

@@ -129,6 +129,8 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _animator: {fileID: 3848227094037181538}
   _sprite: {fileID: 3848227094037181541}
+  _skinData: {fileID: 11400000, guid: c227a2b1ea3992440a759f3fe6dc1741, type: 2}
+  _Skin: 0
   _WeaponZRotation: 0
   WeaponSprite: {fileID: 0}
 --- !u!114 &8925132293088092826
@@ -325,7 +327,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &3848227094037181538
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -333,7 +335,7 @@ Animator:
   m_GameObject: {fileID: 3848227094037181536}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 247be99f4399c0c418f701fe19f7817d, type: 2}
+  m_Controller: {fileID: 9100000, guid: bfcac08e931552b4a861f5ce97a2278a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -342,7 +344,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4303366560233514913
 GameObject:
   m_ObjectHideFlags: 0
