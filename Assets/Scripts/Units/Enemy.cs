@@ -23,6 +23,7 @@ public class Enemy : Unit, ISpawnObject
 
     public override void TakeDamage(Unit from, int damage)
     {
+        if (IsDead) return;
         Health.CurrentHealth -= damage;
         if (from is Player && Health.CurrentHealth <= 0)
             (from as Player).Score += Info.Score;

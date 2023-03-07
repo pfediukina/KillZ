@@ -20,6 +20,7 @@ public class Bullet : NetworkBehaviour, IDamaging
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!HasStateAuthority) return;
         if(collision.tag == _tag)
         {
             if(collision.TryGetComponent<Unit>(out var unit))

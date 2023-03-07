@@ -46,12 +46,12 @@ public class BaseWeapon : NetworkBehaviour
         var player = changed.Behaviour.Runner.FindObject(changed.Behaviour.ID).GetComponent<Player>();
         changed.Behaviour.transform.parent = player.WeaponPlace;
         changed.Behaviour.transform.localPosition = Vector3.zero;
+        changed.Behaviour._unit = player;
         player.GetComponent<NetworkAnimator>().WeaponSprite = changed.Behaviour.GetSprite();
 
         if(player.HasInputAuthority)
         {
             changed.Behaviour.OnAmmoChanged += player.UI.ChangePlayerAmmo;
-            changed.Behaviour._unit = player;
         }
         changed.Behaviour.OnAmmoChanged?.Invoke(changed.Behaviour.Ammo, changed.Behaviour._info.MaxAmmo);
 

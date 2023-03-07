@@ -18,6 +18,7 @@ public class BombLoot : LootItem, IDamaging
     [Rpc]
     public override void RPC_PickUp(Player player)
     {
+        if (!HasStateAuthority) return;
         var colliders = Physics2D.OverlapCircleAll(transform.position, Value, _enemyLayer);
         foreach(var collider in colliders)
         {
