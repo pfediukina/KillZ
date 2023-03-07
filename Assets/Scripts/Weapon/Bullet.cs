@@ -7,15 +7,27 @@ using System.Threading.Tasks;
 using UnityEngine;
 //using static UnityEditor.PlayerSettings;
 
-public class Bullet : NetworkBehaviour
+public class Bullet : NetworkBehaviour, IDamaging
 {
     [SerializeField] private float _speed = 4f;
     [HideInInspector] public bool StartMove = false;
     
     private Vector3 _dir;
+    private string _tag;
 
-    public Unit Owner { get; set; }
-    private int Damage { get; set; }
+    public Unit From { get; set; }
+    public int Damage { get; set; }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == _tag)
+        {
+            if(collision.TryGetComponent<Unit>(out var unit))
+            {
+                GiveDamage(From, unit, Damage);
+            }
+        }
+    }
 
     private void Update()
     {
@@ -27,16 +39,24 @@ public class Bullet : NetworkBehaviour
         }
     }
 
-    public void InitBullet(Unit owner, int damage, Vector3 moveTo)
+    public void InitBullet(Unit owner, int damage, Vector3 moveTo, string Tag)
     {
         MoveTo(moveTo);
-        Owner = owner;
+        From = owner;
         Damage = damage;
+        _tag = Tag;
     }
 
     private void MoveTo(Vector3 pos)
     {
         _dir = pos;
         StartMove = true;
+    }
+
+    public void GiveDamage(Unit from, Unit to, int damage)
+    {
+        if (to.IsDead) return;
+        to.TakeDamage(from, damage);
+        Runner.Despawn(Object);
     }
 }

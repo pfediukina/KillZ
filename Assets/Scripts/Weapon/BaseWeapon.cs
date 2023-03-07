@@ -74,7 +74,7 @@ public class BaseWeapon : NetworkBehaviour
         if(HasStateAuthority)
         {
             var shot = Runner.Spawn(_bulletPref, _bulletSpawn.position);
-            shot.InitBullet(_unit, _info.Damage, dir);
+            shot.InitBullet(_unit, _info.Damage, dir, _info.EnemyTag);
             //shot.MoveTo(dir);
             //shot.Owner = Runner.FindObject(ID).GetComponent<Player>();
         }

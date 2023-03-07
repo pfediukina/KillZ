@@ -4,7 +4,7 @@ using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 [RequireComponent(typeof(StateMachine))]
-public abstract class Unit : NetworkBehaviour
+public abstract class Unit : NetworkBehaviour, ITakeDamage
 {
     [SerializeField] protected UnitInfo _info;
 
@@ -21,6 +21,7 @@ public abstract class Unit : NetworkBehaviour
     }
     private NetworkHealth _health;
 
+    public bool IsDead => States.CurrentState is DeadState ? true : false;
     public StateMachine States { get; private set; }
     public virtual UnitInfo Info => _info;
 
@@ -29,4 +30,6 @@ public abstract class Unit : NetworkBehaviour
         States = GetComponent<StateMachine>();
         States.Initialize(this);
     }
+
+    public virtual void TakeDamage(Unit from, int damage) { }
 }

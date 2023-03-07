@@ -10,6 +10,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _name;
     [SerializeField] private TextMeshProUGUI _timer;
     [SerializeField] private TextMeshProUGUI _ammo;
+    [SerializeField] private TextMeshProUGUI _score;
     [SerializeField] private Image _playerPointer;
     
     //test
@@ -24,20 +25,6 @@ public class PlayerUI : MonoBehaviour
         GameMaster.OnTimeChanged += UpdateTime;
     }
 
-    private void Update()
-    {
-        if (GameMaster.EnableTimer)
-        { 
-        //    int minutes = GameMaster.CurrentTime / 60;
-        //    int seconds = GameMaster.CurrentTime % 60;
-        //    string text = minutes < 10 ? $"0{minutes}" : minutes.ToString();
-        //    text += ":";
-        //    text += seconds < 10 ? $"0{seconds}" : seconds.ToString();
-
-        //    _timer.text = text;
-        }
-    }
-
     public void ChangePlayerAmmo(int ammo, int maxAmmo)
     {
         _ammo.text = $"{ammo}/{maxAmmo}";
@@ -47,6 +34,11 @@ public class PlayerUI : MonoBehaviour
     {
         string text = System.TimeSpan.FromSeconds(time).ToString("mm':'ss");
         _timer.text = text;
+    }
+
+    public void UpdateScore(int score)
+    {
+        _score.text = score.ToString();
     }
 
     public void SwitchPlayerMenu()

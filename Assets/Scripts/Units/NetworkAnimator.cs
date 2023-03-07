@@ -70,7 +70,6 @@ public class NetworkAnimator : NetworkBehaviour
 
     private void SetSkin(int index)
     {
-        Debug.Log(index);
         if (_skinData == null || index > _skinData.skinControllers.Length) return;
 
         _animator.runtimeAnimatorController = _skinData.skinControllers[index];

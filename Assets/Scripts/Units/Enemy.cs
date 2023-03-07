@@ -17,19 +17,15 @@ public class Enemy : Unit, ISpawnObject
     protected override void Awake()
     {
         base.Awake();
+        tag = "Enemy";
         States.AddState(new EnemyMoveState(this));
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public override void TakeDamage(Unit from, int damage)
     {
-        if(collision.tag == "Bullet")
-        {
-            if (States.CurrentState is DeadState) return;
-
-            var bullet = collision.GetComponent<Bullet>();
-            Health.CurrentHealth--;
-            Runner.Despawn(bullet.Object);
-        }
+        Health.CurrentHealth -= damage;
+        if (from is Player && Health.CurrentHealth <= 0)
+            (from as Player).Score += Info.Score;
     }
 
     public void DespawnObject()

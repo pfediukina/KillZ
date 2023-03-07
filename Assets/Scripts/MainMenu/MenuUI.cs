@@ -21,6 +21,7 @@ public class MenuUI : MonoBehaviour
             int index = i;
             _skinButtons[i].onClick.AddListener(() => SetSkin(index));
         }
+        SetSkin(0);
     }
 
     public void HideAllWindows()

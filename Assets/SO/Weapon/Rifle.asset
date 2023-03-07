@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackDistance: 7.5
   AttackRate: 0.3
-  Damage: 0
+  Damage: 1
   MaxAmmo: 15
   IsExplosive: 0
+  EnemyTag: Enemy

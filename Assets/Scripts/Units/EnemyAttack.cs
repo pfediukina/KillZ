@@ -16,13 +16,13 @@ public class EnemyAttack : NetworkBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.TryGetComponent<Player>(out var player) && _canAttack)
-        {
-            if(_enemy.States.CurrentState is not DeadState)
-                player.Health.CurrentHealth--;
+        //if(collision.TryGetComponent<Player>(out var player) && _canAttack)
+        //{
+        //    if(_enemy.States.CurrentState is not DeadState)
+        //        player.Health.CurrentHealth--;
 
-            StartCoroutine(AttackResetTimer());
-        }
+        //    StartCoroutine(AttackResetTimer());
+        //}
     }
 
     private IEnumerator AttackResetTimer()

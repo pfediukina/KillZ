@@ -15,3 +15,4 @@ MonoBehaviour:
   StartSpeed: 80
   AttackDelay: 0.2
   MaxHealth: 1
+  Score: 1

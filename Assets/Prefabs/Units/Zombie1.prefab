@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 2972420885547817101}
   m_Layer: 7
   m_Name: Zombie1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -241,6 +241,8 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _animator: {fileID: 7876598058688815572}
   _sprite: {fileID: 3848227094037181541}
+  _skinData: {fileID: 0}
+  _Skin: 0
   _WeaponZRotation: 0
   WeaponSprite: {fileID: 0}
 --- !u!114 &4814642583765456826

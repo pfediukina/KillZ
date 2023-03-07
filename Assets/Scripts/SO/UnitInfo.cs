@@ -11,5 +11,5 @@ public class UnitInfo : ScriptableObject
     public float StartSpeed;
     public float AttackDelay;
     public int MaxHealth;
-
+    public int Score;
 }

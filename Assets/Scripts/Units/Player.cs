@@ -12,6 +12,14 @@ public class Player : Unit
     [SerializeField] private CinemachineVirtualCamera _camera;
     [SerializeField] private NetworkAnimator _anim;
 
+    [HideInInspector][Networked(OnChanged = nameof(OnScoreChange))] public int Score { get; set; }
+
+    public static void OnScoreChange(Changed<Player> changed)
+    {
+        if(changed.Behaviour.HasInputAuthority) 
+            changed.Behaviour.UI.UpdateScore(changed.Behaviour.Score);
+    }
+
     public Transform WeaponPlace;
 
     public BaseWeapon Weapon
@@ -90,9 +98,10 @@ public class Player : Unit
         {
             _camera.Priority = 10;
         }
-
+        Score = 0;
         Health.OnHealthChanged += UI.HealthUI.UpdateHealth;
     }
+
 
     private void PressedMenu()
     {
@@ -104,8 +113,7 @@ public class Player : Unit
 
     public override void FixedUpdateNetwork()
     {
-        if (Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data) &&
-            States.CurrentState is not DeadState)
+        if (Runner.TryGetInputForPlayer<NetworkInputData>(Object.InputAuthority, out var data) && !IsDead)
         {
             if (data.Direction != Vector2.zero && States.CurrentState is not MoveState)
             {
@@ -117,4 +125,5 @@ public class Player : Unit
             }
         }
     }
+
 }
