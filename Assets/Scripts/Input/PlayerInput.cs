@@ -48,6 +48,9 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
 
             if(_actions.Keyboard.Attack.IsPressed())
                 OnAttackPressed?.Invoke(_actions.Keyboard.MousePos.ReadValue<Vector2>());
+
+            if (_actions.Keyboard.RightStick.IsPressed())
+                OnAttackPressed?.Invoke(_actions.Keyboard.RightStick.ReadValue<Vector2>());
         }
     }
 
@@ -62,6 +65,7 @@ public class PlayerInput : SimulationBehaviour, INetworkRunnerCallbacks
     private void SetBinds()
     {
         _actions.Keyboard.Back.performed += ctx => OnBackPressed?.Invoke();
+       // _actions.Keyboard.RightStick.performed += ctx => OnViewChanged?.Invoke(ctx.ReadValue<Vector2>());
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)

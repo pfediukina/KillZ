@@ -16,6 +16,13 @@ public class DeadState : IState
 
     public void Enter()
     {
+
+        if(_unit.TryGetComponent<Player>(out var player))
+        {
+            if(_unit.HasInputAuthority)
+                player.OnDisconnect(1);
+        }
+
         _collider.enabled = false;
         _unit.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         if (_unit.Runner != null)

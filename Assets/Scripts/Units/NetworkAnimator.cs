@@ -2,6 +2,7 @@ using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class NetworkAnimator : NetworkBehaviour
 {
@@ -22,6 +23,18 @@ public class NetworkAnimator : NetworkBehaviour
         {
             Vector2 weaponPos = Camera.main.WorldToScreenPoint(weapon.transform.position);
             WeaponZRotation = Mathf.Atan2(mousePos.y - weaponPos.y, mousePos.x - weaponPos.x) * Mathf.Rad2Deg + (WeaponSprite.flipX ? 180 : 0);
+            RPC_RotateWeapon(WeaponZRotation);
+        }
+        else
+            RotateWeapon(WeaponZRotation);
+    }
+
+    public void RotateWeaponToDirection(Vector2 dir, SpriteRenderer weapon)
+    {
+        if (WeaponSprite == null) WeaponSprite = weapon;
+        if (HasInputAuthority)
+        {
+            WeaponZRotation = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + (WeaponSprite.flipX ? 180 : 0);
             RPC_RotateWeapon(WeaponZRotation);
         }
         else

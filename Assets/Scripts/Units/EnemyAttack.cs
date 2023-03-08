@@ -10,6 +10,7 @@ using UnityEngine;
 public class EnemyAttack : NetworkBehaviour
 {
     [SerializeField]private Enemy _enemy;
+    private bool _canAttack = true;
 
     private void OnTriggerStay2D(Collider2D collision)
     {

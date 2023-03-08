@@ -60,12 +60,26 @@ public class Player : Unit
         {
             if (Weapon != null && States.CurrentState is not DeadState)
             {
+#if UNITY_ANDROID
                 Weapon.Shoot(ctx);
+                _anim.RotateWeaponToDirection(ctx, Weapon.GetSprite());
+#else
+                var mouse = Camera.main.ScreenToWorldPoint(ctx);
+                Weapon.Shoot(mouse - transform.position);
+#endif
             }
         };
 
         Input.OnBackPressed += PressedMenu;
-        Input.OnViewChanged += ctx => { if (Weapon != null) _anim.CalculateAndRotateWeapon(ctx, Weapon.GetSprite()); };
+        Input.OnViewChanged += ctx => {
+            if (Weapon != null)
+            {
+#if UNITY_ANDROID
+#else
+                _anim.CalculateAndRotateWeapon(ctx, Weapon.GetSprite());
+#endif
+            }
+        };
         Input.OnViewChanged += UI.FollowPoint;
     }
 
@@ -82,12 +96,22 @@ public class Player : Unit
         Health.ResetHealth();
         UI.ShowStartGameButton(this);
     }
-
+    private void FixedUpdate()
+    {
+        if (!GameMaster.EnableTimer) OnDisconnect(0);
+    }
 
     public void OnDisconnect()
     {
+        Debug.Log("Dead exit");
         Runner.Shutdown();
         SceneManager.LoadScene(0);
+    }
+
+    public void OnDisconnect(int state)
+    {
+        Debug.Log("Dead");
+        UI.ShowGameOver(state, OnDisconnect);
     }
 
 

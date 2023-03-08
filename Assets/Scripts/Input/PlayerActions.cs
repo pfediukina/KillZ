@@ -62,6 +62,15 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right Stick"",
+                    ""type"": ""Value"",
+                    ""id"": ""b11dda6c-dd7f-42d4-a49c-91e6aee6ca57"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -218,6 +227,17 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43f98e5e-01f8-4125-b58a-5eefed15f7a7"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": """",
+                    ""action"": ""Right Stick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -258,6 +278,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         m_Keyboard_Back = m_Keyboard.FindAction("Back", throwIfNotFound: true);
         m_Keyboard_MousePos = m_Keyboard.FindAction("MousePos", throwIfNotFound: true);
         m_Keyboard_Attack = m_Keyboard.FindAction("Attack", throwIfNotFound: true);
+        m_Keyboard_RightStick = m_Keyboard.FindAction("Right Stick", throwIfNotFound: true);
         // Screen
         m_Screen = asset.FindActionMap("Screen", throwIfNotFound: true);
         m_Screen_Movement = m_Screen.FindAction("Movement", throwIfNotFound: true);
@@ -324,6 +345,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_Back;
     private readonly InputAction m_Keyboard_MousePos;
     private readonly InputAction m_Keyboard_Attack;
+    private readonly InputAction m_Keyboard_RightStick;
     public struct KeyboardActions
     {
         private @PlayerActions m_Wrapper;
@@ -332,6 +354,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         public InputAction @Back => m_Wrapper.m_Keyboard_Back;
         public InputAction @MousePos => m_Wrapper.m_Keyboard_MousePos;
         public InputAction @Attack => m_Wrapper.m_Keyboard_Attack;
+        public InputAction @RightStick => m_Wrapper.m_Keyboard_RightStick;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -353,6 +376,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Attack.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
+                @RightStick.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRightStick;
+                @RightStick.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRightStick;
+                @RightStick.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRightStick;
             }
             m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
@@ -369,6 +395,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @RightStick.started += instance.OnRightStick;
+                @RightStick.performed += instance.OnRightStick;
+                @RightStick.canceled += instance.OnRightStick;
             }
         }
     }
@@ -412,6 +441,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         void OnBack(InputAction.CallbackContext context);
         void OnMousePos(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnRightStick(InputAction.CallbackContext context);
     }
     public interface IScreenActions
     {

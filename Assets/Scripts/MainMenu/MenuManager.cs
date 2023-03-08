@@ -7,6 +7,11 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private MenuUI _ui;
     [SerializeField] private int _gameSceneID;
 
+    private void Awake()
+    {
+        Cursor.visible = true;
+    }
+
     public void OnButtonPressed(bool isConnect)
     {
         var menuInfo = _ui.GetInput(isConnect);

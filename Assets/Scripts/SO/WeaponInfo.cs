@@ -9,6 +9,6 @@ public class WeaponInfo : ScriptableObject
     public int Damage;
     public int MaxAmmo;
     public bool HasAmmo;
-    //public bool IsExplosive;
+    public bool IsExplosive;
     public string EnemyTag;
 }

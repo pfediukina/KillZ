@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _score;
     [SerializeField] private Button _buttonStartGame;
     [SerializeField] private Image _playerPointer;
+    [SerializeField] private Sprite[] _gameOverSpites;
+    [SerializeField] private Image _gameOverPlace;
     
     //test
     public PlayerHealthUI HealthUI;
@@ -38,8 +41,20 @@ public class PlayerUI : MonoBehaviour
             _buttonStartGame.interactable = false;
     }
 
+    public void ShowGameOver(int type, Action OnOver)
+    {
+        if(type >= _gameOverSpites.Length || type < 0) _gameOverPlace.enabled = false;
+        else
+        {
+            _gameOverPlace.enabled = true;
+            _gameOverPlace.sprite = _gameOverSpites[type];
+            StartCoroutine(EndText(OnOver));
+        }
+    }
+
     public void ShowStartGameButton(Player player)
     {
+        StartCoroutine(EndText(() => _gameOverPlace.enabled = false));
         if (player.HasStateAuthority)
         {
             _buttonStartGame.gameObject.SetActive(true);
@@ -101,5 +116,11 @@ public class PlayerUI : MonoBehaviour
             _playerPointer.gameObject.SetActive(true);
         
         _playerPointer.transform.position = pointPos;
+    }
+
+    private IEnumerator EndText(Action OnEnded) 
+    {
+        yield return new WaitForSeconds(3);
+        OnEnded?.Invoke();
     }
 }

@@ -58,14 +58,16 @@ public class BaseWeapon : NetworkBehaviour
         changed.Behaviour.OnAmmoChanged?.Invoke(changed.Behaviour.Ammo, changed.Behaviour._info.MaxAmmo);
     }
 
-    public virtual void Shoot(Vector2 mousePos)
+    public virtual void Shoot(Vector3 direction)
     {
-        if(_canShoot && Ammo > 0)
+        if (_canShoot && Ammo > 0)
         {
-            var mouse = Camera.main.ScreenToWorldPoint(mousePos);
-            var v = GetShootDirection(mouse);
-            RPC_Fire(v);
-            if(_info.HasAmmo) Ammo--;
+            direction.z = 0;
+            direction.Normalize();
+            direction.z = _bulletSpawn.position.z;
+
+            RPC_Fire(direction);
+            if (_info.HasAmmo) Ammo--;
             StartCoroutine(FireReload());
         }
     }
@@ -87,18 +89,17 @@ public class BaseWeapon : NetworkBehaviour
         if(HasStateAuthority)
         {
             var shot = Runner.Spawn(_bulletPref, _bulletSpawn.position);
-            shot.InitBullet(_unit, _info.Damage, dir, _info.EnemyTag);
+            shot.InitBullet(_unit, _info.Damage, dir, _info.EnemyTag, _info.AttackDistance, _info.IsExplosive);
             //shot.MoveTo(dir);
             //shot.Owner = Runner.FindObject(ID).GetComponent<Player>();
         }
     }
 
-    private Vector3 GetShootDirection(Vector3 pos)
+    public Vector3 GetShootDirection(Vector3 pos)
     {
         var result = pos - _bulletSpawn.position;
         result.z = 0;
         result.Normalize();
-        result *= _info.AttackDistance;
         result.z = _bulletSpawn.position.z; 
         return result;
     }

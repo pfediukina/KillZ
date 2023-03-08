@@ -142,7 +142,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.5, y: 1.5}
   m_EdgeRadius: 0
 --- !u!114 &3810602107213723706
 MonoBehaviour:
@@ -562,7 +562,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _sprite: {fileID: 5645872990417707140}
-  _bulletPref: {fileID: 9145170557020845749, guid: 009add79c3d869846a072ef75473777d, type: 3}
+  _bulletPref: {fileID: 9145170557020845749, guid: 3883a1b0f2a61dc46bb72cb213473b30, type: 3}
   _bulletSpawn: {fileID: 4479195109738893785}
   _info: {fileID: 11400000, guid: 3d90e10eaedf8fe4dbe3d7314e7c1da5, type: 2}
   _ID:

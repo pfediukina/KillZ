@@ -23,11 +23,11 @@ public class GameMaster : NetworkBehaviour
     private static int _time;
     private static Coroutine _gameTimer;
     private bool _isBreak = false;
-    private int _stopTime;
     private Action OnTimeHasCome;
 
     private void Awake()
     {
+        EnableTimer = true;
         Info = _info;
     }
 
@@ -40,7 +40,6 @@ public class GameMaster : NetworkBehaviour
     {
         if (HasStateAuthority)
         {
-            CurrentTime = 0;
             OnTimeChanged?.Invoke(CurrentTime);
             EnableTimer = true;
 
@@ -53,18 +52,14 @@ public class GameMaster : NetworkBehaviour
         }
     }
 
-    public void EndGame()
+    public static void EndGame()
     {
         EnableTimer = false;
-        Break();
-        //ShowAllPlayerGameText(GameText.Intro);
-        //Launcher.DisconnectAll();
     }
 
     private void SpawnWave()
     {
-        CurrentTime = 0;
-        _stopTime = Info.WaveTimers[CurrentWave];
+        CurrentTime = Info.WaveTimers[CurrentWave];
         OnTimeHasCome = Break;
 
         for(int i = 0; i <= CurrentWave; i++)
@@ -79,8 +74,7 @@ public class GameMaster : NetworkBehaviour
 
     private void Break()
     {
-        CurrentTime = 0;
-        _stopTime = Info.BreakTime;
+        CurrentTime = Info.BreakTime;
         OnTimeHasCome = SpawnWave;
 
         for (int i = 0; i <= CurrentWave; i++)
@@ -104,8 +98,8 @@ public class GameMaster : NetworkBehaviour
         {
             yield return new WaitForSecondsRealtime(1);
             //TimeTestEvent();
-            CurrentTime++;
-            if(CurrentTime >= _stopTime)
+            CurrentTime--;
+            if(CurrentTime <= 0)
             {
                 OnTimeHasCome?.Invoke();
             }
