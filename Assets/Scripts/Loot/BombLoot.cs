@@ -24,13 +24,13 @@ public class BombLoot : LootItem, IDamaging
         {
             if (collider.TryGetComponent<Enemy>(out var enemy))
             {
-                GiveDamage(player, enemy, Damage);
+                HitEnemy(player, enemy, Damage);
             }
         }
         
     }
 
-    public void GiveDamage(Unit from, Unit to, int damage)
+    public void HitEnemy(Unit from, Unit to, int damage)
     {
         if(to.IsDead) return;
         to.TakeDamage(from, damage);

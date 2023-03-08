@@ -8,5 +8,5 @@ public interface IDamaging
 {
     public Unit From { get; set; }
     public int Damage { get; set; }
-    public void GiveDamage(Unit from, Unit to, int damage);
+    public void HitEnemy(Unit from, Unit to, int damage);
 }

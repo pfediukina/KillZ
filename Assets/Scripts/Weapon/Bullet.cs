@@ -12,7 +12,7 @@ public class Bullet : NetworkBehaviour, IDamaging
     [SerializeField] private float _speed;
     [SerializeField] private LayerMask _enemyLayer;
     [HideInInspector] public bool StartMove = false;
-    
+
     private Vector3 _dir;
     private Vector3 _endPoint;
     private string _tag;
@@ -24,11 +24,11 @@ public class Bullet : NetworkBehaviour, IDamaging
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!HasStateAuthority) return;
-        if(collision.tag == _tag)
+        if (collision.tag == _tag)
         {
-            if(collision.TryGetComponent<Unit>(out var unit))
+            if (collision.TryGetComponent<Unit>(out var unit))
             {
-                GiveDamage(From, unit, Damage);
+                HitEnemy(From, unit, Damage);
             }
         }
     }
@@ -37,14 +37,14 @@ public class Bullet : NetworkBehaviour, IDamaging
     {
         if (StartMove)
             transform.position += _dir * Runner.DeltaTime * _speed;
-        if(Vector3.Distance(transform.position, _endPoint) <= 0.2)
+        if (Vector3.Distance(transform.position, _endPoint) <= 0.2)
         {
             Runner.Despawn(Object);
         }
     }
 
     public void InitBullet(Unit owner, int damage, Vector3 moveTo, string Tag, float distance, bool explosive = false)
-    { 
+    {
         MoveTo(moveTo, distance);
         From = owner;
         Damage = damage;
@@ -60,7 +60,7 @@ public class Bullet : NetworkBehaviour, IDamaging
         StartMove = true;
     }
 
-    public void GiveDamage(Unit from, Unit to, int damage)
+    public void HitEnemy(Unit from, Unit to, int damage)
     {
         if (_explose && from is Player)
         {
@@ -68,9 +68,7 @@ public class Bullet : NetworkBehaviour, IDamaging
             RPC_Explose(from as Player);
             return;
         }
-        if (to.IsDead) return;
-        to.TakeDamage(from, damage);
-        Runner.Despawn(Object);
+        DoDamage(from, to, damage);
     }
 
     [Rpc]
@@ -82,9 +80,15 @@ public class Bullet : NetworkBehaviour, IDamaging
         {
             if (collider.TryGetComponent<Enemy>(out var enemy))
             {
-                GiveDamage(player, enemy, Damage);
+                DoDamage(player, enemy, Damage);
             }
         }
+    }
 
+    private void DoDamage(Unit from, Unit to, int damage)
+    {
+        if (to.IsDead) return;
+        to.TakeDamage(from, damage);
+        Runner.Despawn(Object);
     }
 }
